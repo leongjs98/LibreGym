@@ -15,14 +15,18 @@
         </tr>
       </thead>
       <tbody>
-        
+        <tr>
+          <th><div class="">Name</div></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>       
       </tbody>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
-  
 </script>
 
 <style scoped>
