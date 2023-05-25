@@ -33,7 +33,7 @@
    </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import dayName from "@/data/dayName.json"
 
   const currentTime = new Date();

@@ -1,6 +1,5 @@
 <template>
 <div class="min-h-screen flex items-center justify-center px-4">
-                <div>{{date}}</div>
     <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -103,15 +102,15 @@
                   Signed Waiver
                 </p>
                 <div class="space-y-2">
-                    <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
-                        <div class="space-x-2 truncate">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="fill-current inline text-gray-500" width="24" height="24" viewBox="0 0 24 24"><path d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z"/></svg>
-                            <span>
-                                signed_waiver_jane_doe.pdf
-                            </span>
-                        </div>
-                        <a href="#" class="text-purple-700 hover:underline">Download</a>
+                  <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
+                    <div class="space-x-2 truncate">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="fill-current inline text-gray-500" width="24" height="24" viewBox="0 0 24 24"><path d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z"/></svg>
+                      <span>
+                        signed_waiver_jane_doe.pdf
+                      </span>
                     </div>
+                    <a href="#" class="text-purple-700 hover:underline">Download</a>
+                  </div>
                 </div>
             </div>
         </div>
@@ -119,31 +118,8 @@
 </div>
 </template>
 
-<script setup>
-  import dayName from "@/data/dayName.json"
+<script setup lang="js">
 
-  const currentTime = new Date();
-  const currentYear = currentTime.getFullYear();
-  const currentMonth = currentTime.getMonth() + 1;
-  const currentDate = currentTime.getDate();
-
-  // Birthdate
-  const birthYear = ref(currentYear);
-  const birthMonth = ref(currentMonth);
-  const birthDate = ref(currentDate);
-
-  const birthTotalDayOfMonth = computed(() => {
-    return new Date(birthYear.value, birthMonth.value, 0).getDate()
-  });
-
-  const birthDOW = computed(() => {
-    return dayName[new Date(birthYear.value, birthMonth.value - 1, birthDate.value).getDay()].shortName
-  });
-
-  // Joined Date
-  // Contract End Date 
-
-  // console.log(dayName[new Date(birthYear.value, birthMonth.value - 1, birthDate.value).getDay()]);
 </script>
 
 <style scoped>

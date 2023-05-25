@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: [
     '~/assets/global.css'
@@ -7,4 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'nuxt-icon'
   ],
+  target:'static',
+  plugins: [
+  ]
 })
