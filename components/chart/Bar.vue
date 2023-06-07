@@ -9,7 +9,6 @@
 <script setup lang="ts">
 import {
   Chart as ChartJS,
-  Title,
   Tooltip,
   Legend,
   BarElement,
@@ -19,21 +18,28 @@ import {
 
 import { Bar } from 'vue-chartjs'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
   title: { type: String },
-  labels: { type: Array, required: true },
-  data: { type: Array, required: true },
-  jsonData: { type: Object, required: true },
+  data: { type: Object, required: true },
 })
-console.log(props.jsonData)
+
+const labelsArr: Array<any> = [];
+const dataArr: Array<any> = [];
+
+for (let key in props.data) {
+  if (props.data.hasOwnProperty(key)) {
+    labelsArr.push(key)
+    dataArr.push(props.data[key])
+  }
+}
 
 const data = ref({
-  labels: props.labels,
+  labels: labelsArr,
   datasets: [
     {
-      data: props.data,
+      data: dataArr,
       label: props.title
     }
   ]

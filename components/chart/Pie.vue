@@ -14,16 +14,27 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 
 const props = defineProps({
   title: { type: String },
-  labels: { type: Array, required: true },
-  data: { type: Array, required: true },
+  data: { type: Object, required: true },
 })
 
+const labelsArr: Array<any> = [];
+const colorArr: Array<any> = [];
+const dataArr: Array<any> = [];
+
+for (let key in props.data) {
+  if (props.data.hasOwnProperty(key)) {
+    labelsArr.push(key)
+    dataArr.push(props.data[key].value)
+    colorArr.push(props.data[key].color)
+  }
+}
+
 const data = ref({
-  labels: ['Gi BJJ', 'No Gi BJJ', 'Strength and Conditioning'],
+  labels: labelsArr,
   datasets: [
     {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF'],
-      data: [40, 20, 80]
+      backgroundColor: colorArr,
+      data: dataArr,
     }
   ]
 })
