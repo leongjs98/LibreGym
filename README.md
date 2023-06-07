@@ -1,7 +1,7 @@
 # LibreGym
 
 An free and open source gym management web application for small to medium
-businesses built with [Nuxt
+martial art gyms built with [Nuxt
 3](https://nuxt.com/docs/getting-started/introduction).
 
 ## Setup
