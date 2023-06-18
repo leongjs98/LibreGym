@@ -1,5 +1,5 @@
 <template>
-  <div class="py-24 mx-auto justify-center items-center h-full flex flex-col gap-10">
+  <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
     <div class="container max-w-3xl mx-auto">
     <div class="flex flex-col w-full" style="cursor: auto;">
       <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 my-2 w-full">
