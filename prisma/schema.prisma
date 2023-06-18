@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// @db.Date() is used because:
+// just wants '1958-02-07' instead '1958-02-07T11:22:49.727Z'
+model Member {
+  // Basic fields
+  id          String   @id @default(uuid())
+  birthday    DateTime @db.Date()
+  email       String?  @db.VarChar(255)
+  phoneNumber String
+  fullName    String   @db.VarChar(255)
+  sex         Sex
+
+  // Gym-related fields
+  status          Status    @default(enquiry)
+  belt            BeltRank  @default(white)
+  stripe          Int       @default(0)
+  joinedDate      DateTime  @db.Date()
+  contractEndDate DateTime? @db.Date()
+  medicalIssues   String?
+  homeAddress     String
+  signedWaiver    Boolean   @default(false)
+  notes           String?
+
+  Attendance   Attendance? @relation(fields: [attendanceId], references: [id])
+  attendanceId String?
+}
+
+model Class {
+  id           String   @id @default(uuid())
+  name         String
+  description  String?
+  startTime    DateTime @db.Date()
+  endTime      DateTime @db.Date()
+  intervalDays Int
+
+  Attendance Attendance[]
+}
+
+model Attendance {
+  id String @id @default(uuid())
+
+  attendees Member[]
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String   @unique
+}
+
+enum Sex {
+  female
+  male
+}
+
+enum Status {
+  enquiry
+  trial
+  member
+}
+
+enum BeltRank {
+  white
+  blue
+  purple
+  brown
+  black
+}

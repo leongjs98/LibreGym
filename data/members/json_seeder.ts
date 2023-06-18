@@ -52,10 +52,10 @@ function createRandomUser(): User {
     stripe: faker.datatype.number({ min: 0, max: 4 }),
     joinedDate: faker.date.past(10),
     contractEndDate: faker.date.future(1),
-    medicalIssues: faker.lorem.lines(),
+    medicalIssues: faker.lorem.paragraph(2),
     homeAddress: faker.address.streetAddress(true),
     signedWaiver: faker.datatype.boolean(),
-    notes: faker.lorem.paragraphs(1),
+    notes: faker.lorem.paragraph(2),
   };
 }
 
