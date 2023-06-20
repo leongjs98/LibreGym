@@ -9,7 +9,7 @@
           Personal details and ranks. 
         </p>
       </div>
-      <div>
+      <form @submit.prevent="submitForm">
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
               <p class="text-gray-600">
                   Full name
@@ -55,29 +55,52 @@
             <p class="text-gray-600">
               Birth Date (YYYY/MM/DD)
             </p>
-            <inputDate/>
+            <inputDate name="birthday"/>
+          </div>
+          <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+            <p class="text-gray-600">
+                Status
+            </p>
+            <select v-model="belt" name="belt" class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+              <option :value="'white'">White</option>
+              <option :value="'blue'">Blue</option>
+              <option :value="'purple'">Purple</option>
+              <option :value="'brown'">Brown</option>
+              <option :value="'black'">Black</option>
+            </select>
+          </div>
+          <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+            <p class="text-gray-600">
+                Status
+            </p>
+            <select v-model="stripe" name="stripe" class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+              <option :value="1">1</option>
+              <option :value="2">2</option>
+              <option :value="3">3</option>
+              <option :value="4">4</option>
+            </select>
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
             <p class="text-gray-600">
                 Status
             </p>
             <select v-model="status" name="status" class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-              <option :value="'Trial'">Trial</option>
-              <option :value="'Enquiry'">Enquiry</option>
-              <option :value="'Member'">Member</option>
+              <option :value="'trial'">Trial</option>
+              <option :value="'enquiry'">Enquiry</option>
+              <option :value="'member'">Member</option>
             </select>
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
             <p class="text-gray-600">
                 Joined Date (YYYY/MM/DD)
             </p>
-            <inputDate/>
+            <inputDate name="joinedDate"/>
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
             <p class="text-gray-600">
                 Contract End Date (YYYY/MM/DD)
             </p>
-            <inputDate/>
+            <inputDate name="contractEndDate"/>
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
               <p class="text-gray-600">
@@ -114,22 +137,34 @@
               </div>
           </div>
           <div class="flex justify-end p-4">
-            <button type="button" @click="submitForm" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
           </div>
-      </div>
+      </form>
     </div>
 </div>
 </template>
 
 <script setup lang="ts">
+  import { useDateStore } from "@/store/dateStore"
+  import { storeToRefs } from "pinia";
+
+  const dateStore = useDateStore()
+
   const fullName = ref('')
   const email = ref('')
   const sex = ref('')
+  const belt = ref('')
+  const stripe = ref('')
   const phoneNumber = ref('')
   const status = ref('')
   const homeAddress = ref('')
   const notes = ref('')
   const medicalIssues = ref('')
+
+  const { dates } = storeToRefs(dateStore)
+  const birthday = dates.value["birthday"]
+  const joinedDate = dates.value["joinedDate"]
+  const contractEndDate = dates.value["contractEndDate"]
 
   function submitForm() {
     useFetch('/api/members', {
@@ -138,6 +173,11 @@
         fullName,
         email,
         sex,
+        belt,
+        stripe,
+        birthday,
+        joinedDate,
+        contractEndDate,
         phoneNumber,
         status,
         homeAddress,
