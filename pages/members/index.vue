@@ -83,6 +83,7 @@
 </template>
 
 <script setup lang="ts">
+  // TODO: Account for failed API fetch
   const { data } = await useFetch('/api/members')
 </script>
 
