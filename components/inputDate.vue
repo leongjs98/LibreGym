@@ -2,36 +2,63 @@
   <div class="flex items-center gap-4">
     <div class="flex w-20 justify-center items-center">
       <select
-        name="year" 
-        v-model="year"
+        v-model="year" 
+        name="year"
         class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
       >
-         <option v-for="y, i in 100" :v-model="currentYear - i">{{ currentYear - i }}</option>
+        <option
+          v-for="y, i in 100"
+          :key="i"
+          :v-model="valueYear + 5 - i"
+        >
+          {{ valueYear + 5 - i }}
+        </option>
       </select>
     </div>
     <div class="w-14">
       <select
-        name="month"
         v-model="month"
+        name="month"
         class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
       >
-        <option v-for="m in 12" :value="m">{{ m }}</option>
+        <option
+          v-for="m in 12"
+          :key="m"
+          :value="m"
+        >
+          {{ m }}
+        </option>
       </select>
     </div>
     <div class="w-14">
       <select
-        name="day"
         v-model="day"
+        name="day"
         class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
       >
-        <option v-for="d in totalDayOfMonth" :value="d">{{ d }}</option>
+        <option
+          v-for="d in totalDayOfMonth"
+          :key="d"
+          :value="d"
+        >
+          {{ d }}
+        </option>
       </select>
     </div>
     <div class="w-20">
       <p>({{ weekday }})</p>
     </div>
-   </div>
+  </div>
 </template>
+
+<script lang="ts">
+  const currentTime = new Date();
+  const valueYear = currentTime.getFullYear();
+  const valueMonth = currentTime.getMonth() + 1;
+  const valueDay = currentTime.getDate();
+
+  export default {}
+</script>
 
 <script setup lang="ts">
   import dayName from "@/data/dayName.json"
@@ -41,17 +68,29 @@
 
   const props = defineProps({
     name: { type: String, required: true },
+    defaultYear: { type: Number, default: valueYear },
+    defaultMonth: { type: Number, default: valueMonth },
+    defaultDay: { type: Number, default: valueDay },
   })
 
-  const currentTime = new Date();
-  const currentYear = currentTime.getFullYear();
-  const currentMonth = currentTime.getMonth() + 1;
-  const currentDay = currentTime.getDate();
+  const { name, defaultYear, defaultMonth, defaultDay } = toRefs(props)
+
+  console.log(name.value, defaultYear.value, defaultMonth.value, defaultDay.value)
+
+  // if (props.defaultYear) {
+  //   valueYear = props.defaultYear;
+  // }
+  // if (props.defaultMonth) {
+  //   valueMonth = props.defaultMonth;
+  // }
+  // if (props.defaultDay) {
+  //   valueDay = props.defaultDay;
+  // }
 
   // TODO: account for contract end date where year is in the future
-  const year = ref(currentYear);
-  const month = ref(currentMonth);
-  const day = ref(currentDay);
+  const year = ref(defaultYear.value);
+  const month = ref(defaultMonth.value);
+  const day = ref(defaultDay.value);
 
   const totalDayOfMonth = computed(() => {
     return new Date(year.value, month.value, 0).getDate()
