@@ -7,12 +7,15 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
+    "@nuxt/eslint-config": "^0.1.1",
     "@nuxtjs/tailwindcss": "^6.6.7",
     "@types/node": "^18",
+    "eslint": "^8.43.0",
     "nuxt": "^3.5.3",
     "nuxt-icon": "^0.4.0",
     "prisma": "^4.15.0"
