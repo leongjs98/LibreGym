@@ -40,8 +40,9 @@ model Class {
   id           String   @id @default(uuid())
   name         String
   description  String?
-  startTime    DateTime @db.Date()
-  endTime      DateTime @db.Date()
+  startDate    DateTime @db.Date()
+  startTime    DateTime @db.Time()
+  endTime      DateTime @db.Time()
   intervalDays Int
 
   Attendance Attendance[]
