@@ -2,6 +2,7 @@
   <div class="p-3 w-36 bg-white rounded-lg shadow-xl">
     <div class="flex">
       <select
+        v-model="hours"
         name="hours"
         class="bg-transparent text-xl appearance-none outline-none"
       >
@@ -15,6 +16,7 @@
       </select>
       <span class="text-xl mr-3">:</span>
       <select
+        v-model="minutes"
         name="minutes"
         class="bg-transparent text-xl appearance-none outline-none mr-4"
       >
@@ -34,6 +36,7 @@
         </option>
       </select>
       <select
+        v-model="amPm"
         name="ampm"
         class="bg-transparent text-xl appearance-none outline-none"
       >
@@ -49,9 +52,22 @@
 </template>
 
 <script setup lang="ts">
+  import { useTimeStore } from "@/store/timeStore"
 
+  const timeStore = useTimeStore()
+
+  const props = defineProps({
+    name: { type: String, required: true },
+    inputHours: { type: Number, default: 4 },
+    inputMinutes: { type: Number, default: 20 },
+    inputAmPm: { type: String, default: "am" }
+  })
+
+  const hours = ref(props.inputHours)
+  const minutes = ref(props.inputMinutes)
+  const amPm = ref(props.inputAmPm)
+
+  watch([hours, minutes, amPm], () => {
+    timeStore.setTime(props.name, hours.value, minutes.value, amPm.value)
+  })
 </script>
-
-<style scoped>
-
-</style>

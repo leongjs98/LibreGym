@@ -9,9 +9,9 @@
         <option
           v-for="y, i in 100"
           :key="i"
-          :v-model="valueYear + 5 - i"
+          :v-model="currentYear + 5 - i"
         >
-          {{ valueYear + 5 - i }}
+          {{ currentYear + 5 - i }}
         </option>
       </select>
     </div>
@@ -53,9 +53,9 @@
 
 <script lang="ts">
   const currentTime = new Date();
-  const valueYear = currentTime.getFullYear();
-  const valueMonth = currentTime.getMonth() + 1;
-  const valueDay = currentTime.getDate();
+  const currentYear = currentTime.getFullYear();
+  const currentMonth = currentTime.getMonth() + 1;
+  const currentDay = currentTime.getDate();
 
   export default {}
 </script>
@@ -68,23 +68,23 @@
 
   const props = defineProps({
     name: { type: String, required: true },
-    defaultYear: { type: Number, default: valueYear },
-    defaultMonth: { type: Number, default: valueMonth },
-    defaultDay: { type: Number, default: valueDay },
+    defaultYear: { type: Number, default: currentYear },
+    defaultMonth: { type: Number, default: currentMonth },
+    defaultDay: { type: Number, default: currentDay },
   })
 
-  const { name, defaultYear, defaultMonth, defaultDay } = toRefs(props)
+  const { defaultYear, defaultMonth, defaultDay } = toRefs(props)
 
-  console.log(name.value, defaultYear.value, defaultMonth.value, defaultDay.value)
+  // console.log(name.value, defaultYear.value, defaultMonth.value, defaultDay.value)
 
   // if (props.defaultYear) {
-  //   valueYear = props.defaultYear;
+  //   currentYear = props.defaultYear;
   // }
   // if (props.defaultMonth) {
-  //   valueMonth = props.defaultMonth;
+  //   currentMonth = props.defaultMonth;
   // }
   // if (props.defaultDay) {
-  //   valueDay = props.defaultDay;
+  //   currentDay = props.defaultDay;
   // }
 
   // TODO: account for contract end date where year is in the future
