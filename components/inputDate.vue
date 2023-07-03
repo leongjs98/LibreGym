@@ -61,7 +61,6 @@
 </script>
 
 <script setup lang="ts">
-  import dayName from "@/data/dayName.json"
   import { useDateStore } from "@/store/dateStore"
 
   const dateStore = useDateStore()
@@ -96,9 +95,10 @@
     return new Date(year.value, month.value, 0).getDate()
   });
 
-  const weekday = computed(() => { // Get day of the week name. i.e. Mon, Tue etc
-    const dayNumber = new Date(year.value, month.value - 1, day.value).getDay()
-    return dayName[dayNumber].shortName
+  const weekday = computed(() => {
+    const selectedDate = new Date(year.value, month.value - 1, day.value)
+    const dayOfWeek = selectedDate.toDateString().substring(0, 3)
+    return dayOfWeek
   });
 
   watch([year, month, day], () => {
