@@ -7,282 +7,43 @@
           New class
         </NuxtLink>
       </div>
-      <div class="flex mb-5">
+      <div v-for="(date, i) in datesOfThisWeek" :key="i" class="flex mb-5">
         <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            1 May<br>
+          <div>
+            {{ getFormattedDate(date) }}<br>
           </div>
-          <div class="">
-            Mon
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            2 May<br>
-          </div>
-          <div class="">
-            Tue
+          <div>
+            {{ getDayOfWeek(date) }}
           </div>
         </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              MMA Grappling
+        <!-- <div class="flex"> -->
+        <div v-for="displayClass in classesSortedByDOW[i]" :key="displayClass.id" class="flex">
+          <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
+            <div>
+              <div>
+                {{ displayClass.name }}
+              </div>
+              <div>
+                {{ getTime(displayClass.startTime) }} - {{ getTime(displayClass.endTime) }}
+              </div>
             </div>
-            <div class="">
-              10:30 - 11:30
-            </div>
+            <button class="ml-3">
+              <Icon name="mingcute:more-2-line" size="24" />
+            </button>
           </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            3 May<br>
-          </div>
-          <div class="">
-            Wed
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              MMA Striking
-            </div>
-            <div class="">
-              10:30 - 11:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            4 May<br>
-          </div>
-          <div class="">
-            Thu
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            5 May<br>
-          </div>
-          <div class="">
-            Fri
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            6 May<br>
-          </div>
-          <div class="">
-            Sat
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-      </div>
-      <div class="flex mb-5">
-        <div class="flex flex-col justify-center rounded bg-gray-100 w-fit p-3">
-          <div class="">
-            7 May<br>
-          </div>
-          <div class="">
-            Sun
-          </div>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              Strength & Conditioning
-            </div>
-            <div class="">
-              16:30 - 17:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
-        </div>
-        <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
-          <div class="">
-            <div class="">
-              BJJ
-            </div>
-            <div class="">
-              18:30 - 19:30
-            </div>
-          </div>
-          <button class="ml-3">
-            <Icon name="mingcute:more-2-line" size="24"/>
-          </button>
+          <!-- <div class="flex justify-center items-start py-3 pl-3 border border-gray-300"> -->
+          <!--   <div> -->
+          <!--     <div> -->
+          <!--       BJJ -->
+          <!--     </div> -->
+          <!--     <div> -->
+          <!--       18:30 - 19:30 -->
+          <!--     </div> -->
+          <!--   </div> -->
+          <!--   <button class="ml-3"> -->
+          <!--     <Icon name="mingcute:more-2-line" size="24" /> -->
+          <!--   </button> -->
+          <!-- </div> -->
         </div>
       </div>
       <div class="mt-10 flex gap-10">
@@ -355,8 +116,58 @@
 </template>
 
 <script setup lang="ts">
+const currentDate = new Date()
+const currentDayOfWeek = currentDate.getDay()
+
+const datesOfThisWeek: Date[] = []
+
+for (let i=0; i<7; i++) {
+  const tempDOW = new Date()
+  tempDOW.setDate(currentDate.getDate() + (i - currentDayOfWeek))
+  datesOfThisWeek.push(tempDOW)
+}
+
+// const startOfWeek = datesOfThisWeek[0]
+// const endOfWeek = datesOfThisWeek[datesOfThisWeek.length - 1]
+
+// E.g. Jul 03 2023
+function getFormattedDate(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric'
+  }
+  return date.toLocaleDateString('en-US', options).replace(',', '')
+}
+
+// E.g. Mon
+function getDayOfWeek(date: Date): string {
+  return date.toLocaleString('en', { weekday: 'short' })
+}
+
+// E.g. 06:09 PM
+function getTime(inputTime: Date|string): string {
+  const time = new Date(inputTime)
+  return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+
+interface Class {
+  id: string;
+  name: string;
+  description: string;
+  startDate: Date;
+  dayOfWeek: number;
+  startTime: Date;
+  endTime: Date;
+  intervalDays: number;
+}
+
+const classesSortedByDOW: Array<object> = [] // DOW = day of week
+
+for (let i = 0; i < 7; i++) {
+  const { data: singleClass } = await useFetch("/api/classes", {
+    query: { dayofweek: i }
+  })
+  classesSortedByDOW.push(singleClass.value)
+}
 </script>
-
-<style scoped>
-
-</style>

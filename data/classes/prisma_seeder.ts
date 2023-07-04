@@ -1,5 +1,6 @@
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker'
 import { PrismaClient } from '@prisma/client'
+import fixClasses from './data.json' assert { type: 'json' }
 
 const prisma = new PrismaClient()
 const NUMBER_OF_CLASSES = 10;
@@ -15,7 +16,7 @@ class Class {
   description!: string;
 }
 
-const classes: Class[] = [];
+const randomClasses: Class[] = [];
 
 function createRandomClass(): Class {
   const randomTime = faker.date.between('2020-01-01T07:00:00.000Z', '2020-01-01T21:00:00.000Z')
@@ -38,14 +39,14 @@ function createRandomClass(): Class {
 
 for (let i = 0; i < NUMBER_OF_CLASSES; i++) {
   const singleClass = createRandomClass();
-  classes.push(singleClass);
+  randomClasses.push(singleClass);
 }
 
 async function main() {
   await prisma.class.deleteMany()
 
   await prisma.class.createMany({
-    data: classes
+    data: fixClasses
   })
 }
 

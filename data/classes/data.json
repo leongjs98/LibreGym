@@ -1,0 +1,146 @@
+[
+  {
+    "name": "MMA Grappling",
+    "startDate": "2023-05-02T05:35:51.088Z",
+    "dayOfWeek": 2,
+    "startTime": "2020-01-01T10:30:00.727Z",
+    "endTime": "2020-01-01T11:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz II"
+  },
+  {
+    "name": "MMA Striking",
+    "startDate": "2023-05-02T05:35:51.088Z",
+    "dayOfWeek": 2,
+    "startTime": "2020-01-01T10:30:00.727Z",
+    "endTime": "2020-01-01T11:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz III"
+  },
+  {
+    "name": "No Gi BJJ",
+    "startDate": "2023-05-01T05:35:51.088Z",
+    "dayOfWeek": 1,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz"
+  },
+  {
+    "name": "Gi BJJ",
+    "startDate": "2023-05-02T05:35:51.088Z",
+    "dayOfWeek": 2,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz II"
+  },
+  {
+    "name": "No Gi BJJ",
+    "startDate": "2023-05-03T05:35:51.088Z",
+    "dayOfWeek": 3,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz III"
+  },
+  {
+    "name": "Gi BJJ",
+    "startDate": "2023-05-04T05:35:51.088Z",
+    "dayOfWeek": 4,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz IV"
+  },
+  {
+    "name": "No Gi BJJ",
+    "startDate": "2023-05-05T05:35:51.088Z",
+    "dayOfWeek": 5,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz V"
+  },
+  {
+    "name": "Gi BJJ",
+    "startDate": "2023-05-06T05:35:51.088Z",
+    "dayOfWeek": 6,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz VI"
+  },
+  {
+    "name": "No Gi BJJ",
+    "startDate": "2023-05-07T05:35:51.088Z",
+    "dayOfWeek": 0,
+    "startTime": "2020-01-01T18:30:00.727Z",
+    "endTime": "2020-01-01T19:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Skillz VII"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-01T05:35:51.088Z",
+    "dayOfWeek": 1,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-02T05:35:51.088Z",
+    "dayOfWeek": 2,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains II"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-03T05:35:51.088Z",
+    "dayOfWeek": 3,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains III"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-04T05:35:51.088Z",
+    "dayOfWeek": 4,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains IV"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-05T05:35:51.088Z",
+    "dayOfWeek": 5,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains V"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-06T05:35:51.088Z",
+    "dayOfWeek": 6,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains VI"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "startDate": "2023-05-07T05:35:51.088Z",
+    "dayOfWeek": 0,
+    "startTime": "2020-01-01T16:30:00.727Z",
+    "endTime": "2020-01-01T17:30:00.727Z",
+    "intervalDays": 7,
+    "description": "Gains VII"
+  }
+]
