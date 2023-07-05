@@ -1,15 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export default defineEventHandler(async (event) => {
-
+export default defineEventHandler(async () => {
   try {
     const members = await prisma.member.findMany()
     return members
   } catch (e) {
-    console.error(e)
-    return e;
+    return e
+  } finally {
+    await prisma.$disconnect()
   }
-
-  await prisma.$disconnect()
 })

@@ -35,10 +35,6 @@
   const showAlert = ref(true)
   const classes = ref('')
 
-  if (props.alertType == 'error') {
-    title.value = 'Failed'
-  }
-
   switch (props.alertType) {
   case 'error':
     title.value = 'Failed'

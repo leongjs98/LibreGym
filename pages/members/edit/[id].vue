@@ -1,7 +1,5 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert v-if="data" alertType="success" :message="'New member ' + data.fullName + ' created'"/>
-    <StickyAlert v-if="error" alertType="error" :message="error"/>
     <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -57,7 +55,12 @@
             <p class="text-gray-600">
               Birth Date (YYYY/MM/DD)
             </p>
-            <inputDate name="birthday"/>
+            <inputDate
+              name="birthday"
+              :defaultYear="birthdayYear"
+              :defaultMonth="birthdayMonth"
+              :defaultDay="birthdayDay"
+            />
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
             <p class="text-gray-600">
@@ -96,13 +99,23 @@
             <p class="text-gray-600">
                 Joined Date (YYYY/MM/DD)
             </p>
-            <inputDate name="joinedDate"/>
+            <inputDate
+              name="joinedDate"
+              :defaultYear="joinedDateYear"
+              :defaultMonth="joinedDateMonth"
+              :defaultDay="joinedDateDay"
+            />
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
             <p class="text-gray-600">
                 Contract End Date (YYYY/MM/DD)
             </p>
-            <inputDate name="contractEndDate"/>
+            <inputDate
+              name="contractEndDate"
+              :defaultYear="contractEndDateYear"
+              :defaultMonth="contractEndDateMonth"
+              :defaultDay="contractEndDateDay"
+            />
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
               <p class="text-gray-600">
@@ -152,25 +165,45 @@
 
   const dateStore = useDateStore()
 
-  const fullName = ref('')
-  const email = ref('')
-  const sex = ref('')
-  const belt = ref('')
-  const stripe = ref('')
-  const phoneNumber = ref('')
-  const status = ref('')
-  const homeAddress = ref('')
-  const notes = ref('')
-  const medicalIssues = ref('')
+  const route = useRoute()
+  const id = route.params.id
 
+  const { data: member } = await useFetch(`/api/members/${id}`)
+
+  const fullName = ref(member.value.fullName)
+  const email = ref(member.value.email)
+  const sex = ref(member.value.sex)
+  const belt = ref(member.value.belt)
+  const stripe = ref(member.value.stripe)
+  const phoneNumber = ref(member.value.phoneNumber)
+  const status = ref(member.value.status)
+  const homeAddress = ref(member.value.homeAddress)
+  const notes = ref(member.value.notes)
+  const medicalIssues = ref(member.value.medicalIssues)
+
+  const fillBirthday = new Date(member.value.birthday)
+  const birthdayYear = fillBirthday.getFullYear()
+  const birthdayMonth = fillBirthday.getMonth() + 1
+  const birthdayDay = fillBirthday.getDate()
+  
+  const fillJoinedDate = new Date(member.value.joinedDate)
+  const joinedDateYear = fillJoinedDate.getFullYear()
+  const joinedDateMonth = fillJoinedDate.getMonth() + 1
+  const joinedDateDay = fillJoinedDate.getDate()
+  
+  const fillContractEndDate = new Date(member.value.contractEndDate)
+  const contractEndDateYear = fillContractEndDate.getFullYear()
+  const contractEndDateMonth = fillContractEndDate.getMonth() + 1
+  const contractEndDateDay = fillContractEndDate.getDate()
+  
   const { dates } = storeToRefs(dateStore)
   const birthday = dates.value["birthday"]
   const joinedDate = dates.value["joinedDate"]
   const contractEndDate = dates.value["contractEndDate"]
 
   async function submitForm() {
-    const { data, error } = await useFetch('/api/members', {
-      method: "post",
+    const { data, error } = await useFetch(`/api/members/${id}`, {
+      method: "put",
       body: {
         fullName,
         email,
