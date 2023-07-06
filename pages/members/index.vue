@@ -1,6 +1,6 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert v-if="error" alertType="error" :message="error"/>
+    <StickyAlert v-if="error" alert-type="error" :message="error"/>
     <div>
       <div class="w-full flex justify-end">
         <NuxtLink href="/members/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
@@ -11,7 +11,7 @@
 
       <table class="table-auto rounded border border-gray-500">
         <thead class="border border-gray-500">
-          <tr class="">
+          <tr>
             <th class="px-3 py-2 text-lg font-light text-left w-72">Members</th>
             <th class="py-2 text-lg font-light text-left w-80">Contacts</th>
             <th class="py-2 text-lg font-light w-28">Status</th>
@@ -69,10 +69,38 @@
                 <Icon name="material-symbols:edit" size="18"/>
                 Edit
               </NuxtLink>
-              <button class="flex items-center gap-1">
+              <label :for="'delete-'+i" class="flex items-center gap-1">
                 <Icon name="material-symbols:delete-forever-sharp" size="18"/>
                 Delete
-              </button>
+              </label>
+              <input type="checkbox" class="hidden peer" :id="'delete-'+i">
+              <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
+                <h2 class="text-lg font-bold">
+                  Are you sure you want to delete {{ member.fullName }} permanently?
+                </h2>
+
+                <p class="mt-2 text-sm text-gray-500">
+                  Doing that will delete the user permanently, are you 100% sure it's OK?
+                </p>
+
+                <div class="mt-4 flex gap-2">
+                  <button
+                    @click="deleteMember(member.id)"
+                    type="button"
+                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
+                  >
+                    Yes, I'm sure
+                  </button>
+
+                  <label
+                    :for="'delete-'+i"
+                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600"
+                  >
+                    No, go back
+                  </label>
+                </div>
+              </div>
+
             </div>
           </tr>
         </tbody>
@@ -82,8 +110,17 @@
 </template>
 
 <script setup lang="ts">
-  const { data, error } = await useFetch('/api/members')
+  const { data, error, refresh } = await useFetch('/api/members')
   // TODO: Interactive search member function (use for loop to access data.value[i])
+
+  async function deleteMember(memberId: String) {
+    const { data: deletedMember } = await useFetch(`/api/members/${memberId}`, {
+      method: "delete"
+    })
+
+    refresh()
+    console.log(`Deleted member ${deletedMember.value.fullName}`)
+  }
 </script>
 
 <style scoped>
