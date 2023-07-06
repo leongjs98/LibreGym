@@ -140,16 +140,23 @@
 
   })
  
-  function submitForm() {
-    console.log("class name", className.value)
-    console.log("frequency", intervalDays.value)
-    console.log("start date", dateStore.dates["classStartDate"])
-    console.log("start time", timeStore.times["startTime"])
-    console.log("end time", timeStore.times["endTime"])
-    console.log("description", description.value)
+  async function submitForm() {
+    const startDate = dateStore.dates["classStartDate"]
+    const dayOfWeek = new Date(startDate).getDay()
+
+    const { data, error } = await useFetch('/api/classes', {
+      method: "post",
+      body: {
+        name: className,
+        description,
+        startDate,
+        dayOfWeek, 
+        startTime: timeStore.times["startTime"],
+        endTime: timeStore.times["endTime"],
+        intervalDays,
+      }
+    })
+
+    console.log(data, error)
   }
 </script>
-
-<style scoped>
-
-</style>
