@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showAlert"
+    v-show="alerts[name]"
     class="sticky top-20 border-l-4 p-4"
     :class="classes"
     role="alert"
@@ -13,8 +13,8 @@
         <p>{{ message }}</p>
       </div>
       <button
+        @click="alertStore.setAlert(name, false)"
         class="flex justify-start"
-        @click="showAlert = false"
       >
         <Icon
           name="mdi:close-thick"
@@ -26,25 +26,22 @@
 </template>
 
 <script setup lang="ts">
+  import { storeToRefs } from "pinia";
+  import { useAlertStore } from "@/store/alertStore"
+  const alertStore = useAlertStore()
+
   const props = defineProps({
-    alertType: { type: String, required: true },
+    name: { type: String, required: true },
+    title: { type: String, default: "Attention!" },
+    color: { type: String, default: "blue" },
     message: { type: String, required: true }
   })
 
-  const title = ref('')
-  const showAlert = ref(true)
+  // const showAlert = ref(false)
+  const { alerts } = storeToRefs(alertStore)
   const classes = ref('')
 
-  switch (props.alertType) {
-  case 'error':
-    title.value = 'Failed'
-    classes.value = 'bg-red-200 border-red-600 text-red-600'
-    break;
-  case 'success':
-    title.value = 'Succeed'
-    classes.value = 'bg-green-200 border-green-600 text-green-600'
-    break;
-  default:
-    title.value = ''
-}
+  const color = props.color.toLowerCase()
+  classes.value = `bg-${color}-200 border-${color}-600 text-${color}-600`
+
 </script>

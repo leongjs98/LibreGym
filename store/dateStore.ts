@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useDateStore = defineStore('dateStore', () => {
 
-  const dates: Ref<{ birthday: string; joinedDate: string; contractEndDate: string; classStartDate: string}> = ref({
+  const dates: Ref<{ birthday: string; joinedDate: string; contractEndDate: string; classStartDate: string }> = ref({
     birthday: "2023-06-18T00:00:00.000Z",
     joinedDate: "2023-06-19T00:00:00.000Z",
     contractEndDate: "2023-06-20T00:00:00.000Z",

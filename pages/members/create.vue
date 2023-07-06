@@ -1,8 +1,8 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert v-if="data" alertType="success" :message="'New member ' + data.fullName + ' created'"/>
-    <StickyAlert v-if="error" alertType="error" :message="error"/>
-    <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
+    <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
+    <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
           Member Information
@@ -26,13 +26,13 @@
                 <li class="w-28 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                   <div class="flex items-center pl-3">
                     <input v-model="sex" :value="'female'" id="one-time-class" type="radio" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                    <label for="one-time-class" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
+                    <label for="female" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
                   </div>
                 </li>
                 <li class="w-28 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                   <div class="flex items-center pl-3">
                     <input v-model="sex" :value="'male'" id="repeat-class" type="radio" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                    <label for="repeat-class" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Male</label>
+                    <label for="male" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Male</label>
                   </div>
                 </li>
               </ul>
@@ -148,9 +148,25 @@
 
 <script setup lang="ts">
   import { useDateStore } from "@/store/dateStore"
+  import { useAlertStore } from "@/store/alertStore"
   import { storeToRefs } from "pinia";
 
   const dateStore = useDateStore()
+  const alertStore = useAlertStore()
+
+  const successAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'green'
+  })
+
+  const errorAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'red'
+  })
 
   const fullName = ref('')
   const email = ref('')
@@ -169,7 +185,7 @@
   const contractEndDate = dates.value["contractEndDate"]
 
   async function submitForm() {
-    const { data, error } = await useFetch('/api/members', {
+     const { data: updatedMember, error: updateError } = await useFetch('/api/members', {
       method: "post",
       body: {
         fullName,
@@ -187,11 +203,20 @@
         medicalIssues,
       }
     })
-    console.log(data, error)
-    console.log(data.value, error.value)
+
+      console.log("submitted form")
+    if (updatedMember.value) {
+      successAlert.value.title = 'Updated member'
+      successAlert.value.message = `${updatedMember.value?.fullName} has been updated`
+      alertStore.setAlert("success", true)
+      console.log("this success")
+      console.log(updatedMember.value)
+    } else if (updateError.value) {
+      errorAlert.value.title = error.value?.name
+      errorAlert.value.message = error.value?.message
+      alertStore.setAlert("updateError", true)
+      console.log("this updateError")
+      console.log(updateError.value)
+    }
   }
-
 </script>
-
-<style scoped>
-</style>

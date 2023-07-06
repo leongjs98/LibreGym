@@ -1,6 +1,7 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert v-if="error" alert-type="error" :message="error"/>
+    <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div>
       <div class="w-full flex justify-end">
         <NuxtLink href="/members/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
@@ -20,13 +21,13 @@
           </tr>
         </thead>
         <tbody class="">
-          <tr v-for="member,i in data" :id="member.id" :key="member.id"
+          <tr v-for="member,i in members" :id="member.id" :key="member.id"
             class="hover:bg-gray-100"
           >
             <td class="px-3 py-2 font-normal">
               <div class="text-left">{{ member.fullName }}</div>
               <div class="text-left">
-                {{ member.belt }} 
+                {{ member.belt }}
                 <span v-if="member.sex == 'female'" class="">(F)</span>
                 <span v-if="member.sex == 'male'" class="">(M)</span>
               </div>
@@ -59,7 +60,7 @@
                 <Icon name="mingcute:more-2-line" size="24"/>
               </label>
             </td>
-            <input type="checkbox" name="" class="hidden peer" :id="'option-'+i">
+            <input type="checkbox" class="hidden peer" :id="'option-'+i" />
             <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
               <!-- <button class="flex items-center gap-1"> -->
               <!--   <Icon name="ic:round-more-horiz" size="18"/> -->
@@ -110,16 +111,48 @@
 </template>
 
 <script setup lang="ts">
-  const { data, error, refresh } = await useFetch('/api/members')
-  // TODO: Interactive search member function (use for loop to access data.value[i])
+  import { useAlertStore } from '~/store/alertStore';
+
+  const alertStore = useAlertStore()
+
+  const infoAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'blue'
+  })
+
+  const errorAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'red'
+  })
+
+  // TODO: Interactive search member function (use for loop to access members.value[i])
+  const { data: members, error: getError, refresh } = await useFetch('/api/members')
+
+  if (getError.value) {
+    errorAlert.value.title = getError.value?.name
+    errorAlert.value.message = getError.value?.message
+    alertStore.setAlert("error", true)
+  }
 
   async function deleteMember(memberId: String) {
-    const { data: deletedMember } = await useFetch(`/api/members/${memberId}`, {
+    const { data: deletedMember, error: deleteError } = await useFetch(`/api/members/${memberId}`, {
       method: "delete"
     })
 
+    if (deletedMember.value) {
+      infoAlert.value.title = 'Deleted member'
+      infoAlert.value.message = `${deletedMember.value?.fullName} has been deleted`
+      alertStore.setAlert("info", true)
+    } else if (deleteError.value) {
+      errorAlert.value.title = deleteError.value?.name
+      errorAlert.value.message = deleteError.value?.message
+      alertStore.setAlert("error", true)
+    }
     refresh()
-    console.log(`Deleted member ${deletedMember.value.fullName}`)
   }
 </script>
 
