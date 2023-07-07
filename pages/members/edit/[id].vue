@@ -1,5 +1,7 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+    <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -92,7 +94,7 @@
             <select v-model="status" name="status" class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
               <option :value="'trial'">Trial</option>
               <option :value="'enquiry'">Enquiry</option>
-              <option :value="'member'">Member</option>
+              <option :value="'getMember'">Member</option>
             </select>
           </div>
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
@@ -161,37 +163,59 @@
 
 <script setup lang="ts">
   import { useDateStore } from "@/store/dateStore"
+  import { useAlertStore } from "@/store/alertStore"
   import { storeToRefs } from "pinia";
 
   const dateStore = useDateStore()
+  const alertStore = useAlertStore()
 
   const route = useRoute()
   const id = route.params.id
 
-  const { data: member } = await useFetch(`/api/members/${id}`)
+  const successAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'green'
+  })
 
-  const fullName = ref(member.value.fullName)
-  const email = ref(member.value.email)
-  const sex = ref(member.value.sex)
-  const belt = ref(member.value.belt)
-  const stripe = ref(member.value.stripe)
-  const phoneNumber = ref(member.value.phoneNumber)
-  const status = ref(member.value.status)
-  const homeAddress = ref(member.value.homeAddress)
-  const notes = ref(member.value.notes)
-  const medicalIssues = ref(member.value.medicalIssues)
+  const errorAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'red'
+  })
 
-  const fillBirthday = new Date(member.value.birthday)
+  const { data: getMember, error: getError } = await useFetch(`/api/members/${id}`)
+
+  if (getError.value) {
+    errorAlert.value.title = getError.value.name
+    errorAlert.value.message = 'Failed to retrieve data' + getError.value.message 
+    alertStore.setAlert("error", true)
+  }
+
+  const fullName = ref(getMember.value?.fullName)
+  const email = ref(getMember.value?.email)
+  const sex = ref(getMember.value?.sex)
+  const belt = ref(getMember.value?.belt)
+  const stripe = ref(getMember.value?.stripe)
+  const phoneNumber = ref(getMember.value?.phoneNumber)
+  const status = ref(getMember.value?.status)
+  const homeAddress = ref(getMember.value?.homeAddress)
+  const notes = ref(getMember.value?.notes)
+  const medicalIssues = ref(getMember.value?.medicalIssues)
+
+  const fillBirthday = new Date(getMember.value?.birthday)
   const birthdayYear = fillBirthday.getFullYear()
   const birthdayMonth = fillBirthday.getMonth() + 1
   const birthdayDay = fillBirthday.getDate()
   
-  const fillJoinedDate = new Date(member.value.joinedDate)
+  const fillJoinedDate = new Date(getMember.value?.joinedDate)
   const joinedDateYear = fillJoinedDate.getFullYear()
   const joinedDateMonth = fillJoinedDate.getMonth() + 1
   const joinedDateDay = fillJoinedDate.getDate()
   
-  const fillContractEndDate = new Date(member.value.contractEndDate)
+  const fillContractEndDate = new Date(getMember.value?.contractEndDate)
   const contractEndDateYear = fillContractEndDate.getFullYear()
   const contractEndDateMonth = fillContractEndDate.getMonth() + 1
   const contractEndDateDay = fillContractEndDate.getDate()
@@ -202,7 +226,7 @@
   const contractEndDate = dates.value["contractEndDate"]
 
   async function submitForm() {
-    const { data, error } = await useFetch(`/api/members/${id}`, {
+    const { data: updateMember, error: updateError } = await useFetch(`/api/members/${id}`, {
       method: "put",
       body: {
         fullName,
@@ -220,8 +244,17 @@
         medicalIssues,
       }
     })
-    console.log(data, error)
-    console.log(data.value, error.value)
+
+
+    if (updateMember.value) {
+      successAlert.value.title = 'Updated member'
+      successAlert.value.message = `${updateMember.value?.fullName} has been updated.`
+      alertStore.setAlert("success", true)
+    } else if (updateError.value) {
+      errorAlert.value.title = updateError.value?.name
+      errorAlert.value.message = updateError.value?.message
+      alertStore.setAlert("error", true)
+    }
   }
 
 </script>

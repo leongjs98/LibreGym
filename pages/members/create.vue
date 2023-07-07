@@ -185,7 +185,7 @@
   const contractEndDate = dates.value["contractEndDate"]
 
   async function submitForm() {
-     const { data: updatedMember, error: updateError } = await useFetch('/api/members', {
+     const { data, error } = await useFetch('/api/members', {
       method: "post",
       body: {
         fullName,
@@ -204,19 +204,15 @@
       }
     })
 
-      console.log("submitted form")
-    if (updatedMember.value) {
-      successAlert.value.title = 'Updated member'
-      successAlert.value.message = `${updatedMember.value?.fullName} has been updated`
+    if (data.value) {
+      successAlert.value.title = 'Created member'
+      successAlert.value.message = `${data.value?.fullName} has been created`
       alertStore.setAlert("success", true)
-      console.log("this success")
-      console.log(updatedMember.value)
-    } else if (updateError.value) {
+    } else if (error.value) {
       errorAlert.value.title = error.value?.name
       errorAlert.value.message = error.value?.message
-      alertStore.setAlert("updateError", true)
-      console.log("this updateError")
-      console.log(updateError.value)
+      alertStore.setAlert("error", true)
     }
   }
+
 </script>
