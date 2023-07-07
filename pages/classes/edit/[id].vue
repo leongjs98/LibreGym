@@ -3,8 +3,11 @@
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
-          New class
+          Class Information
         </h2>
+        <p class="text-sm text-gray-500">
+          Details of {{ getClass?.id }}
+        </p>
       </div>
         <form @submit.prevent="submitForm">
           <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
@@ -65,7 +68,7 @@
             <p class="text-gray-600">
               Start date (YYYY/MM/DD)*
             </p>
-            <inputDate name="classStartDate"/>
+            <inputDate name="classStartDate" :default-year="startDateYear" :default-month="startDateMonth" :default-day="startDateDay" />
           </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
@@ -76,18 +79,18 @@
               <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">From</h4>
               <inputTime 
                 name="startTime"
-                :input-hours="4"
-                :input-minutes="20"
-                input-am-pm="am"
+                :default-hours="startTimeHours"
+                :default-minutes="startTimeMinutes"
+                :default-am-pm="startTimeAmPm"
               />
             </div>
             <div class="flex items-center gap-6">
               <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">To</h4>
               <inputTime 
                 name="endTime"
-                :input-hours="6"
-                :input-minutes="9"
-                input-am-pm="pm"
+                :default-hours="endTimeHours"
+                :default-minutes="endTimeMinutes"
+                :default-am-pm="endTimeAmPm"
               />
             </div>
           </div>
@@ -119,10 +122,37 @@
     Custom
   }
 
-  const className = ref("")
+  const classId = useRoute().params.id
+
+  const { data: getClass } = await useFetch(`/api/classes/${classId}`)
+
+  const className: String = ref(getClass.value?.name)
   const frequency: Ref<ClassFrequency> = ref(ClassFrequency.Custom)
-  const intervalDays = ref(1)
-  const description = ref("")
+  const intervalDays = ref(getClass.value?.intervalDays)
+  const description = ref(getClass.value?.description)
+
+  const fillStartDate = new Date(getClass.value?.startDate)
+  const startDateYear = fillStartDate.getFullYear()
+  const startDateMonth = fillStartDate.getMonth() + 1
+  const startDateDay = fillStartDate.getDate()
+
+  const fillStartTime = new Date(getClass.value?.startTime)
+  const startTimeMinutes = fillStartTime.getMinutes()
+  let startTimeHours = fillStartTime.getHours()
+  let startTimeAmPm = "am"
+  if (startTimeHours >= 12) {
+    startTimeHours -= 12
+    startTimeAmPm = "pm"
+  }
+
+  const fillEndTime = new Date(getClass.value?.endTime)
+  const endTimeMinutes = fillEndTime.getMinutes()
+  let endTimeHours = fillEndTime.getHours()
+  let endTimeAmPm = "am"
+  if (endTimeHours >= 12) {
+    endTimeHours -= 12
+    endTimeAmPm = "pm"
+  }
 
   watch(frequency, () => {
 
@@ -137,15 +167,14 @@
     } else if (isCustomClass) {
       intervalDays.value = 1
     }
-
   })
  
   async function submitForm() {
     const startDate = dateStore.dates["classStartDate"]
     const dayOfWeek = new Date(startDate).getDay()
 
-    const { data, error } = await useFetch('/api/classes', {
-      method: "post",
+    const { data: updateClass, error: updateError } = await useFetch(`/api/classes/${classId}`, {
+      method: "put",
       body: {
         name: className,
         description,
@@ -157,5 +186,6 @@
       }
     })
 
+    console.log(updateClass.value)
   }
 </script>

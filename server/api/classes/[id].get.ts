@@ -1,6 +1,20 @@
-export default defineEventHandler(async (event) => {
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
-  return {
-    classId: event.context.params.id 
+export default defineEventHandler(async (event) => {
+  const classId = event.context.params.id
+
+  try {
+    const findClass = await prisma.class.findUnique({
+      where: {
+        id: classId
+      }
+    })
+
+    return findClass
+  } catch (e) {
+    return e
+  } finally {
+    await prisma.$disconnect()
   }
 })

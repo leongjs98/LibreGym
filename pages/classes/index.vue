@@ -16,9 +16,8 @@
             {{ getDayOfWeek(date) }}
           </div>
         </div>
-        <!-- <div class="flex"> -->
-        <div v-for="displayClass in classesSortedByDOW[i]" :key="displayClass.id" class="flex">
-          <div class="flex justify-center items-start py-3 pl-3 border border-gray-300">
+        <div v-for="(displayClass, j) in classesSortedByDOW[i]" :key="displayClass.id" class="flex">
+          <div class="relative flex justify-center items-start py-3 pl-3 border border-gray-300">
             <div>
               <div>
                 {{ displayClass.name }}
@@ -27,25 +26,57 @@
                 {{ getTime(displayClass.startTime) }} - {{ getTime(displayClass.endTime) }}
               </div>
             </div>
-            <button class="ml-3">
+            <label :for="'option-'+i+'-'+j" class="ml-3 hover:cursor-pointer">
               <Icon name="mingcute:more-2-line" size="24" />
-            </button>
+            </label>
+            <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
+            <div class="hidden peer-checked:block absolute z-10 -right-20 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
+              <!-- <button class="flex items-center gap-1"> -->
+              <!--   <Icon name="ic:round-more-horiz" size="18"/> -->
+              <!--   more -->
+              <!-- </button> -->
+              <NuxtLink :to="`/classes/edit/${displayClass.id}`" class="flex items-center gap-1">
+                <Icon name="material-symbols:edit" size="18"/>
+                Edit
+              </NuxtLink>
+              <label :for="`delete-${i}-${j}`" class="flex items-center gap-1 cursor-pointer">
+                <Icon name="material-symbols:delete-forever-sharp" size="18"/>
+                Delete
+              </label>
+              <input type="checkbox" class="hidden peer" :id="`delete-${i}-${j}`">
+              <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
+                <h2 class="text-lg font-bold">
+                  Are you sure you want to delete {{ displayClass.name }} permanently?
+                </h2>
+
+                <p class="mt-2 text-sm text-gray-500">
+                  Doing this will delete the class permanently, are you 100% sure it's OK?
+                </p>
+
+                <div class="mt-4 flex gap-2">
+                  <button
+                    @click="deleteClass(displayClass.id)"
+                    type="button"
+                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
+                  >
+                    Yes, I'm sure
+                  </button>
+
+                  <label
+                    :for="`delete-${i}-${j}`"
+                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600"
+                  >
+                    No, go back
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-          <!-- <div class="flex justify-center items-start py-3 pl-3 border border-gray-300"> -->
-          <!--   <div> -->
-          <!--     <div> -->
-          <!--       BJJ -->
-          <!--     </div> -->
-          <!--     <div> -->
-          <!--       18:30 - 19:30 -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!--   <button class="ml-3"> -->
-          <!--     <Icon name="mingcute:more-2-line" size="24" /> -->
-          <!--   </button> -->
-          <!-- </div> -->
         </div>
       </div>
+
+      <!-- ------------ -->
+
       <div class="mt-10 flex gap-10">
         <h3 class="w-28 font-semibold text-gray-900 dark:text-white">Attendance</h3>
           <div class="flex flex-col bg-white shadow-lg rounded lg:w-1/3  md:w-1/2 w-full p-5">
@@ -165,9 +196,15 @@ interface Class {
 const classesSortedByDOW: Array<object> = [] // DOW = day of week
 
 for (let i = 0; i < 7; i++) {
-  const { data: singleClass } = await useFetch("/api/classes", {
+  const { data: singleClass, refresh } = await useFetch("/api/classes", {
     query: { dayofweek: i }
   })
   classesSortedByDOW.push(singleClass.value)
+}
+
+async function deleteClass(classId: String) {
+  const { data: deleteClass } = await useFetch(`/api/classes/${classId}`, {
+    method: "delete"
+  })
 }
 </script>

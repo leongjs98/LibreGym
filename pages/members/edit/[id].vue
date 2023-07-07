@@ -169,8 +169,7 @@
   const dateStore = useDateStore()
   const alertStore = useAlertStore()
 
-  const route = useRoute()
-  const id = route.params.id
+  const id = useRoute().params.id
 
   const successAlert = ref({
     show: false,
@@ -245,7 +244,6 @@
       }
     })
 
-
     if (updateMember.value) {
       successAlert.value.title = 'Updated member'
       successAlert.value.message = `${updateMember.value?.fullName} has been updated.`
@@ -256,8 +254,4 @@
       alertStore.setAlert("error", true)
     }
   }
-
 </script>
-
-<style scoped>
-</style>

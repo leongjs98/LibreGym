@@ -70,7 +70,7 @@
                 <Icon name="material-symbols:edit" size="18"/>
                 Edit
               </NuxtLink>
-              <label :for="'delete-'+i" class="flex items-center gap-1">
+              <label :for="'delete-'+i" class="flex items-center gap-1 cursor-pointer">
                 <Icon name="material-symbols:delete-forever-sharp" size="18"/>
                 Delete
               </label>
@@ -81,7 +81,7 @@
                 </h2>
 
                 <p class="mt-2 text-sm text-gray-500">
-                  Doing that will delete the user permanently, are you 100% sure it's OK?
+                  Doing this will delete the user permanently, are you 100% sure it's OK?
                 </p>
 
                 <div class="mt-4 flex gap-2">
@@ -155,7 +155,3 @@
     refresh()
   }
 </script>
-
-<style scoped>
-
-</style>

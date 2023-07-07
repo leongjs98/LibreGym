@@ -58,14 +58,14 @@
 
   const props = defineProps({
     name: { type: String, required: true },
-    inputHours: { type: Number, default: 4 },
-    inputMinutes: { type: Number, default: 20 },
-    inputAmPm: { type: String, default: "am" }
+    defaultHours: { type: Number, default: 4 },
+    defaultMinutes: { type: Number, default: 20 },
+    defaultAmPm: { type: String, default: "am" }
   })
 
-  const hours = ref(props.inputHours)
-  const minutes = ref(props.inputMinutes)
-  const amPm = ref(props.inputAmPm)
+  const hours = ref(props.defaultHours)
+  const minutes = ref(props.defaultMinutes)
+  const amPm = ref(props.defaultAmPm)
 
   watch([hours, minutes, amPm], () => {
     timeStore.setTime(props.name, hours.value, minutes.value, amPm.value)
