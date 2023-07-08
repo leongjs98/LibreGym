@@ -16,7 +16,11 @@ export default defineEventHandler(async (event) => {
         ]
       })
     } else {
-      classes = await prisma.class.findMany()
+      classes = await prisma.class.findMany({
+        orderBy: [
+          { startTime: "asc" }
+        ]
+      })
     }
 
     return classes

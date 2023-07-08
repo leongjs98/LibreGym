@@ -16,14 +16,14 @@
             {{ getDayOfWeek(date) }}
           </div>
         </div>
-        <div v-for="(displayClass, j) in classesSortedByDOW[i]" :key="displayClass.id" class="flex">
+        <div v-for="(classToDisplay, j) in classesSortedByDOW[i]" :key="classToDisplay.id" class="flex">
           <div class="relative flex justify-center items-start py-3 pl-3 border border-gray-300">
             <div>
               <div>
-                {{ displayClass.name }}
+                {{ classToDisplay.name }}
               </div>
               <div>
-                {{ getTime(displayClass.startTime) }} - {{ getTime(displayClass.endTime) }}
+                {{ getTime(classToDisplay.startTime) }} - {{ getTime(classToDisplay.endTime) }}
               </div>
             </div>
             <label :for="'option-'+i+'-'+j" class="ml-3 hover:cursor-pointer">
@@ -35,7 +35,7 @@
               <!--   <Icon name="ic:round-more-horiz" size="18"/> -->
               <!--   more -->
               <!-- </button> -->
-              <NuxtLink :to="`/classes/edit/${displayClass.id}`" class="flex items-center gap-1">
+              <NuxtLink :to="`/classes/edit/${classToDisplay.id}`" class="flex items-center gap-1">
                 <Icon name="material-symbols:edit" size="18"/>
                 Edit
               </NuxtLink>
@@ -46,7 +46,7 @@
               <input type="checkbox" class="hidden peer" :id="`delete-${i}-${j}`">
               <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
                 <h2 class="text-lg font-bold">
-                  Are you sure you want to delete {{ displayClass.name }} permanently?
+                  Are you sure you want to delete {{ classToDisplay.name }} permanently?
                 </h2>
 
                 <p class="mt-2 text-sm text-gray-500">
@@ -55,7 +55,8 @@
 
                 <div class="mt-4 flex gap-2">
                   <button
-                    @click="deleteClass(displayClass.id)"
+                    @click="deleteClass(classToDisplay.id)"
+                    :for="`delete-${i}-${j}`"
                     type="button"
                     class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
                   >
@@ -151,15 +152,13 @@ const currentDate = new Date()
 const currentDayOfWeek = currentDate.getDay()
 
 const datesOfThisWeek: Date[] = []
+const classesSortedByDOW = ref([ [], [], [], [], [], [], [] ])  // DOW = day of week
 
 for (let i=0; i<7; i++) {
   const tempDOW = new Date()
   tempDOW.setDate(currentDate.getDate() + (i - currentDayOfWeek))
   datesOfThisWeek.push(tempDOW)
 }
-
-// const startOfWeek = datesOfThisWeek[0]
-// const endOfWeek = datesOfThisWeek[datesOfThisWeek.length - 1]
 
 // E.g. Jul 03 2023
 function getFormattedDate(date: Date): string {
@@ -182,29 +181,24 @@ function getTime(inputTime: Date|string): string {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-interface Class {
-  id: string;
-  name: string;
-  description: string;
-  startDate: Date;
-  dayOfWeek: number;
-  startTime: Date;
-  endTime: Date;
-  intervalDays: number;
-}
+const { data: classes, refresh: refetchAPI } = await useFetch("/api/classes")
 
-const classesSortedByDOW: Array<object> = [] // DOW = day of week
-
-for (let i = 0; i < 7; i++) {
-  const { data: singleClass, refresh } = await useFetch("/api/classes", {
-    query: { dayofweek: i }
-  })
-  classesSortedByDOW.push(singleClass.value)
+async function sortClasses() {
+  classesSortedByDOW.value = [ [], [], [], [], [], [], [] ]
+  for (var i = 0; i < classes.value.length; i++) {
+    const currentClass = classes.value[i]
+    classesSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
+  }
 }
 
 async function deleteClass(classId: String) {
   const { data: deleteClass } = await useFetch(`/api/classes/${classId}`, {
     method: "delete"
   })
+
+  await refetchAPI()
+  await sortClasses()
 }
+
+sortClasses()
 </script>
