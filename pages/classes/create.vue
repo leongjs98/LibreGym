@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4">
+  <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+    <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -109,15 +111,31 @@
 <script setup lang="ts">
   import { useDateStore } from '~/store/dateStore';
   import { useTimeStore } from '~/store/timeStore';
+  import { useAlertStore } from '@/store/alertStore';
 
   const dateStore = useDateStore()
   const timeStore = useTimeStore()
+  const alertStore = useAlertStore()
 
   enum ClassFrequency {
     Weekly,
     OneTime,
     Custom
   }
+
+  const successAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'green'
+  })
+
+  const errorAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'red'
+  })
 
   const className = ref("")
   const frequency: Ref<ClassFrequency> = ref(ClassFrequency.Custom)
@@ -157,5 +175,14 @@
       }
     })
 
+    if (data.value) {
+      successAlert.value.title = 'Created class'
+      successAlert.value.message = `${data.value?.name} has been created.`
+      alertStore.setAlert("success", true)
+    } else if (error.value) {
+      errorAlert.value.title = error.value?.name
+      errorAlert.value.message = error.value?.message
+      alertStore.setAlert("error", true)
+    }
   }
 </script>

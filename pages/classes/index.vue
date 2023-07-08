@@ -1,5 +1,7 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+    <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div>
       <div class="w-full flex justify-end">
         <NuxtLink to="/classes/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
@@ -148,11 +150,28 @@
 </template>
 
 <script setup lang="ts">
+import { useAlertStore } from '@/store/alertStore';
+const alertStore = useAlertStore()
+
 const currentDate = new Date()
 const currentDayOfWeek = currentDate.getDay()
 
 const datesOfThisWeek: Date[] = []
 const classesSortedByDOW = ref([ [], [], [], [], [], [], [] ])  // DOW = day of week
+
+const infoAlert = ref({
+  show: false,
+  title: '',
+  message: '',
+  color: 'blue'
+})
+
+const errorAlert = ref({
+  show: false,
+  title: '',
+  message: '',
+  color: 'red'
+})
 
 for (let i=0; i<7; i++) {
   const tempDOW = new Date()
@@ -181,7 +200,13 @@ function getTime(inputTime: Date|string): string {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-const { data: classes, refresh: refetchAPI } = await useFetch("/api/classes")
+const { data: classes, error: getError, refresh: refetchAPI } = await useFetch("/api/classes")
+
+if (getError.value) {
+  errorAlert.value.title = getError.value?.name
+  errorAlert.value.message = getError.value?.message
+  alertStore.setAlert("error", true)
+}
 
 async function sortClasses() {
   classesSortedByDOW.value = [ [], [], [], [], [], [], [] ]
@@ -192,12 +217,21 @@ async function sortClasses() {
 }
 
 async function deleteClass(classId: String) {
-  const { data: deleteClass } = await useFetch(`/api/classes/${classId}`, {
+  const { data: deleteClass, error: deleteError } = await useFetch(`/api/classes/${classId}`, {
     method: "delete"
   })
 
-  await refetchAPI()
-  await sortClasses()
+  if (deleteClass.value) {
+    infoAlert.value.title = 'Deleted member'
+    infoAlert.value.message = `${deleteClass.value?.name} has been permanently deleted.`
+    alertStore.setAlert("info", true)
+    await refetchAPI()
+    await sortClasses()
+  } else if (deleteError.value) {
+    errorAlert.value.title = deleteError.value?.name
+    errorAlert.value.message = deleteError.value?.message
+    alertStore.setAlert("error", true)
+  }
 }
 
 sortClasses()

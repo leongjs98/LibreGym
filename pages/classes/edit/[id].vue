@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4">
+  <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+    <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" />
+    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -112,9 +114,25 @@
 <script setup lang="ts">
   import { useDateStore } from '~/store/dateStore';
   import { useTimeStore } from '~/store/timeStore';
+  import { useAlertStore } from '@/store/alertStore';
 
   const dateStore = useDateStore()
   const timeStore = useTimeStore()
+  const alertStore = useAlertStore()
+
+  const successAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'green'
+  })
+
+  const errorAlert = ref({
+    show: false,
+    title: '',
+    message: '',
+    color: 'red'
+  })
 
   enum ClassFrequency {
     Weekly,
@@ -124,7 +142,13 @@
 
   const classId = useRoute().params.id
 
-  const { data: getClass } = await useFetch(`/api/classes/${classId}`)
+  const { data: getClass, error: getError } = await useFetch(`/api/classes/${classId}`)
+
+  if (getError.value) {
+    errorAlert.value.title = getError.value?.name
+    errorAlert.value.message = getError.value?.message
+    alertStore.setAlert("error", true)
+  }
 
   const className: String = ref(getClass.value?.name)
   const frequency: Ref<ClassFrequency> = ref(ClassFrequency.Custom)
@@ -140,22 +164,29 @@
   const startTimeMinutes = fillStartTime.getMinutes()
   let startTimeHours = fillStartTime.getHours()
   let startTimeAmPm = "am"
-  if (startTimeHours >= 12) {
+  if (startTimeHours > 12) {
     startTimeHours -= 12
     startTimeAmPm = "pm"
+  } else if (startTimeHours == 12) {
+    startTimeAmPm = "pm"
+  } else if (startTimeHours == 0) {
+    startTimeHours = 12
   }
 
   const fillEndTime = new Date(getClass.value?.endTime)
   const endTimeMinutes = fillEndTime.getMinutes()
   let endTimeHours = fillEndTime.getHours()
   let endTimeAmPm = "am"
-  if (endTimeHours >= 12) {
+  if (endTimeHours > 12) {
     endTimeHours -= 12
     endTimeAmPm = "pm"
+  } else if (endTimeHours == 12) {
+    endTimeAmPm = "pm"
+  } else if (endTimeHours == 0) {
+    endTimeHours = 12
   }
 
   watch(frequency, () => {
-
     const isWeeklyClass = frequency.value === ClassFrequency.Weekly
     const isOneTimeClass = frequency.value === ClassFrequency.OneTime
     const isCustomClass = frequency.value === ClassFrequency.Custom
@@ -186,6 +217,15 @@
       }
     })
 
-    console.log(updateClass.value)
+    if (updateClass.value) {
+      successAlert.value.title = 'Updated class'
+      successAlert.value.message = `${updateClass.value?.name} has been updated.`
+      alertStore.setAlert("success", true)
+      console.log("update success")
+    } else if (updateError.value) {
+      errorAlert.value.title = updateError.value?.name
+      errorAlert.value.message = updateError.value?.message
+      alertStore.setAlert("error", true)
+    }
   }
 </script>
