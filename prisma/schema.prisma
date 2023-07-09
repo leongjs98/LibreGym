@@ -10,8 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// @db.Date() is used because:
-// just wants '1958-02-07' instead '1958-02-07T11:22:49.727Z'
+// @db.Date = '1958-02-07' instead '1958-02-07T11:22:49.727Z'
 model Member {
   // Basic fields
   id          String   @id @default(uuid())
@@ -32,8 +31,9 @@ model Member {
   signedWaiver    Boolean   @default(false)
   notes           String?
 
-  Attendance   Attendance? @relation(fields: [attendanceId], references: [id])
-  attendanceId String?
+  Attendance Attendance[]
+
+  // @@unique([fullName, birthday])
 }
 
 model Class {
@@ -50,11 +50,17 @@ model Class {
 }
 
 model Attendance {
-  id String @id @default(uuid())
+  id   String   @id @default(uuid())
+  date DateTime @db.Date()
 
-  attendees Member[]
-  class     Class    @relation(fields: [classId], references: [id])
-  classId   String   @unique
+  attendee   Member @relation(fields: [attendeeId], references: [id])
+  attendeeId String
+  class      Class  @relation(fields: [classId], references: [id])
+  classId    String
+  // class    Class[]
+  // attendee Member[]
+
+  @@unique([attendeeId, classId, date])
 }
 
 enum Sex {
