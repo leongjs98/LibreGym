@@ -8,7 +8,7 @@
             <h1 class="text-xl lg:text-2xl font-bold cursor-pointer">Gym Name</h1>
             <ul class="hidden md:flex justify-around space-x-4">
               <li><NuxtLink to="/" class="hover:text-indigo-600 text-gray-700">Home</NuxtLink></li>
-              <li><NuxtLink to="/attendances" class="hover:text-indigo-600 text-gray-700">Attendances</NuxtLink></li>
+              <li><NuxtLink to="/analytics" class="hover:text-indigo-600 text-gray-700">Analytics</NuxtLink></li>
               <li><NuxtLink to="/classes" class="hover:text-indigo-600 text-gray-700">Classes</NuxtLink></li>
               <li><NuxtLink to="/members" class="hover:text-indigo-600 text-gray-700">Members</NuxtLink></li>
               <!-- <NuxtLink to="/settings" class="hover:text-indigo-600 text-gray-700"> -->
@@ -35,7 +35,7 @@
       <input type="checkbox" id="mobile-menu" class="hidden peer">
       <ul class="hidden peer-checked:flex fixed bg-gray-50 shadow w-full flex-col p-10 space-y-4">
         <li><NuxtLink to="/" class="hover:text-indigo-600 text-gray-700">Home</NuxtLink></li>
-        <li><NuxtLink to="/attendances" class="hover:text-indigo-600 text-gray-700">Attendances</NuxtLink></li>
+        <li><NuxtLink to="/analytics" class="hover:text-indigo-600 text-gray-700">Analytics</NuxtLink></li>
         <li><NuxtLink to="/classes" class="hover:text-indigo-600 text-gray-700">Classes</NuxtLink></li>
         <li><NuxtLink to="/members" class="hover:text-indigo-600 text-gray-700">Members</NuxtLink></li>
       </ul>
