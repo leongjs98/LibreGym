@@ -5,7 +5,7 @@
     <div>
       <div class="w-full flex justify-end">
         <NuxtLink to="/classes/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
-          <Icon name="material-symbols:add-rounded" size="24"/>
+          <IconAddRounded />
           New class
         </NuxtLink>
       </div>
@@ -29,20 +29,20 @@
               </div>
             </div>
             <label :for="'option-'+i+'-'+j" class="ml-3 hover:cursor-pointer">
-              <Icon name="mingcute:more-2-line" size="24" />
+              <IconMore2Line />
             </label>
             <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
             <div class="hidden peer-checked:block absolute z-10 -right-20 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
-              <!-- <button class="flex items-center gap-1"> -->
-              <!--   <Icon name="ic:round-more-horiz" size="18"/> -->
-              <!--   more -->
-              <!-- </button> -->
+              <NuxtLink :to="`/classes/details/${classToDisplay.id}`" class="flex items-center gap-1">
+                <IconRoundMoreHoriz size="18px" />
+                Details
+              </NuxtLink>
               <NuxtLink :to="`/classes/edit/${classToDisplay.id}`" class="flex items-center gap-1">
-                <Icon name="material-symbols:edit" size="18"/>
+                <IconEdit size="18px" />
                 Edit
               </NuxtLink>
               <label :for="`delete-${i}-${j}`" class="flex items-center gap-1 cursor-pointer">
-                <Icon name="material-symbols:delete-forever-sharp" size="18"/>
+                <IconDeleteForeverSharp size="18px" />
                 Delete
               </label>
               <input type="checkbox" class="hidden peer" :id="`delete-${i}-${j}`">
@@ -76,74 +76,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- ------------ -->
-
-      <div class="mt-10 flex gap-10">
-        <h3 class="w-28 font-semibold text-gray-900 dark:text-white">Attendance</h3>
-          <div class="flex flex-col bg-white shadow-lg rounded lg:w-1/3  md:w-1/2 w-full p-5">
-            <div class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md hover:cursor-pointer">
-              <div class="flex flex-col">
-                <div>
-                  <span>1.</span> Rebecca Burke
-                </div>
-                <!-- <div class="text-gray-400 text-sm font-normal"> -->
-                <!--   +1(227)-691-8675 -->
-                <!-- </div> -->
-              </div>
-            </div>
-              <!-- Item 2 -->
-            <div class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md hover:cursor-pointer">
-               <div class="flex flex-col">
-                 <div>
-                  <span>2.</span> Connor Bell
-                 </div>
-                 <!-- <div class="text-gray-400 text-sm font-normal"> -->
-                 <!--   +1(579)-416-9946 -->
-                 <!-- </div> -->
-               </div>
-            </div>
-              <!-- Item 3 -->
-            <div class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md hover:cursor-pointer">
-               <div class="flex flex-col">
-                 <div>
-                   <span>3.</span> Lee Fields
-                 </div>
-                 <!-- <div class="text-gray-400 text-sm font-normal"> -->
-                 <!--   +1(737)-996-6407 -->
-                 <!-- </div> -->
-               </div>
-            </div>
-              <!-- Item 4 -->
-              <div class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md hover:cursor-pointer">
-                <div class="flex flex-col">
-                  <div>
-                   <span>4.</span> Marie Cole
-                  </div>
-                  <!-- <div class="text-gray-400 text-sm font-normal"> -->
-                  <!--   +1(924)-106-8494 -->
-                  <!-- </div> -->
-                </div>
-              </div>
-              <!-- Item 5 -->
-              <div class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md hover:cursor-pointer">
-                <div class="flex flex-col">
-                  <div>
-                    <span>5.</span> Penny Foster
-                  </div>
-                  <!-- <div class="text-gray-400 text-sm font-normal"> -->
-                  <!--   +1(040)-121-3669 -->
-                  <!-- </div> -->
-                </div>
-              </div>
-
-              <div class="flex justify-end odd:bg-gray-50 font-semibold text-gray-800 p-3 rounded-md hover:cursor-pointer">
-                <button class="flex items-center w-fit p-1 border-2 border-gray-500 rounded hover:bg-gray-100">
-                  <Icon name="material-symbols:add-rounded" size="24"/>
-                </button>
-              </div>
-            </div>
       </div>
     </div>
   </div>

@@ -3,9 +3,15 @@
     <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
     <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div>
-      <div class="w-full flex justify-end">
-        <NuxtLink href="/members/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
-          <Icon name="material-symbols:add-rounded" size="24"/>
+      <div class="w-full flex justify-between items-end mb-8">
+        <div class="border-b">
+          <p class="text-xl ">
+            Member: 
+            <b>{{ members?.length }}</b>
+          </p>
+        </div>
+        <NuxtLink href="/members/create" class="flex items-center w-fit px-4 py-2 border-2 border-gray-500 rounded">
+          <IconAddRounded />
           New member
         </NuxtLink>
       </div>
@@ -57,21 +63,21 @@
             </td>
             <td class="">
               <label :for="'option-'+i" class="hover:cursor-pointer">
-                <Icon name="mingcute:more-2-line" size="24"/>
+                <IconMore2Line />
               </label>
             </td>
             <input type="checkbox" class="hidden peer" :id="'option-'+i" />
             <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
               <!-- <button class="flex items-center gap-1"> -->
-              <!--   <Icon name="ic:round-more-horiz" size="18"/> -->
+              <!--   <IconRoundMoreHoriz size="18px" /> -->
               <!--   more -->
               <!-- </button> -->
               <NuxtLink :to="`/members/edit/${member.id}`" class="flex items-center gap-1">
-                <Icon name="material-symbols:edit" size="18"/>
+                <IconEdit size="18px" />
                 Edit
               </NuxtLink>
               <label :for="'delete-'+i" class="flex items-center gap-1 cursor-pointer">
-                <Icon name="material-symbols:delete-forever-sharp" size="18"/>
+                <IconDeleteForeverSharp size="18px" />
                 Delete
               </label>
               <input type="checkbox" class="hidden peer" :id="'delete-'+i">

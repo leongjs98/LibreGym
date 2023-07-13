@@ -16,10 +16,7 @@
         @click="alertStore.setAlert(name, false)"
         class="flex justify-start"
       >
-        <Icon
-          name="mdi:close-thick"
-          size="24"
-        />
+        <IconCloseThick />
       </button>
     </div>
   </div>
