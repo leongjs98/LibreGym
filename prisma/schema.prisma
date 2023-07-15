@@ -50,8 +50,8 @@ model Class {
 }
 
 model Attendance {
-  id   String   @id @default(uuid())
-  date DateTime @db.Date()
+  id        String   @id @default(uuid())
+  classDate DateTime @db.Date()
 
   attendee   Member @relation(fields: [attendeeId], references: [id])
   attendeeId String
@@ -60,7 +60,7 @@ model Attendance {
   // class    Class[]
   // attendee Member[]
 
-  @@unique([attendeeId, classId, date])
+  @@unique([attendeeId, classId, classDate])
 }
 
 enum Sex {
