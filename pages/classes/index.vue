@@ -33,7 +33,7 @@
             </label>
             <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
             <div class="hidden peer-checked:block absolute z-10 -right-20 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
-              <NuxtLink :to="`/classes/details/${classToDisplay.id}`" class="flex items-center gap-1">
+              <NuxtLink :to="`/classes/attendance/${classToDisplay.id}`" class="flex items-center gap-1">
                 <IconRoundMoreHoriz size="18px" />
                 Details
               </NuxtLink>

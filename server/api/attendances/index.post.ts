@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const attendance: object = await readBody(event)
   const attendeeId: string = attendance["attendeeId"]
   const classId: string = attendance["classId"]
-  const classDate: string = attendance.date
+  const classDate: string = attendance["classDate"]
 
   let message: String = ''
 
@@ -20,14 +20,25 @@ export default defineEventHandler(async (event) => {
       const dateIsAfterClassStartDate = dayDiff >= 0
 
       if (dateMatchesIntervalDays && dateIsAfterClassStartDate) {
-        const newAttendance = await prisma.attendance.create({
+        const newAttendance = await prisma.attendance.upsert({
+          where: {
+            attendeeId_classId_classDate: {
+              attendeeId: attendeeId,
+              classId: classId,
+              classDate: classDate,
+            }
+          },
+          update: {},
+          create: {
+            attendeeId,
+            classId,
+            classDate,
+          }
           // For insomnia JSON array
           // data: attendance[0]
-
-          data: attendance
         })
 
-        message = `Created attendance for ${attendee?.fullName} at ${classAttended?.name} (${attendance.date})`
+        message = `Created attendance for ${attendee?.fullName} at ${classAttended?.name} (${attendance.classDate})`
         return newAttendance
       }
 
@@ -37,11 +48,11 @@ export default defineEventHandler(async (event) => {
     message = "Member or class do not exist"
 
   } catch (e) {
-    message = e
+    console.log(e)
     return e
   } finally {
     await prisma.$disconnect()
-    console.log(message)
+    // console.log(message)
   }
 
 })

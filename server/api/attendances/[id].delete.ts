@@ -2,11 +2,11 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
-  const id = event.context.params.id
+  const id = event.context.params?.id
 
   try {
     const deleteAttendance = await prisma.attendance.delete({
-      where: { id: id },
+      where: { id },
     })
 
     console.log(`Delete attedance.\n${deleteAttendance}`)

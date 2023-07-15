@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="alerts[name]"
-    class="sticky top-20 border-l-4 p-4"
+    class="sticky z-50 top-20 border-l-4 p-4"
     :class="classes"
     role="alert"
   >
