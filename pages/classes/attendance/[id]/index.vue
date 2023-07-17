@@ -24,13 +24,13 @@
             </option>
           </select>
           <div class="flex flex-col bg-white shadow-lg rounded space-y-4 md:w-1/2 w-full p-5">
-            <div class="flex items-center">   
-              <label for="simple-search" class="sr-only">Search and filter members</label>
+            <div class="flex items-center">
+              <label for="attendees-search" class="sr-only">Search</label>
               <div class="relative w-full">
                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                 </div>
-                <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search and filter members">
+                <input type="text" id="attendees-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search">
               </div>
             </div>
             <div class="flex justify-between items-center odd:bg-gray-50 font-semibold text-gray-800 p-3 rounded-md">
@@ -52,7 +52,7 @@
                 <div class="w-full flex justify-between items-end">
                   <div>
                     <div>
-                      <span>{{i+1}}.</span> {{ attendee.fullName }}
+                      {{i+1}} {{ attendee.fullName }}
                     </div>
                     <div class="text-gray-400 text-sm font-normal">
                       {{ attendee.phoneNumber }}
@@ -79,12 +79,12 @@
             <Icon @click="openModal = false" class="cursor-pointer" name="material-symbols:close" size="24" />
           </div>
           <div class="flex items-center">   
-            <label for="simple-search" class="sr-only">Search and filter members</label>
+            <label for="non-attendees-search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
               </div>
-              <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search and filter members">
+              <input type="text" id="non-attendees-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search">
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
             <div class="w-full flex justify-between">
               <div>
                 <div>
-                  <span>{{ i+1 }}.</span> {{ nonAttendees.fullName }}
+                  {{ i+1 }} {{ nonAttendees.fullName }}
                 </div>
                 <div class="text-gray-400 text-sm font-normal">
                   {{ nonAttendees.phoneNumber }}
@@ -149,11 +149,11 @@
   const classDate = ref(datesFromStartToNow[0].toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }))
 
   const { data: getAttendees, error: getAttendeesError, refresh: getAttendeesRefresh } = await useFetch(`/api/members`, {
-    query: { classId, classDate: classDate.value }
+    query: { classId, classDate }
   })
 
   const { data: getNonAttendees, error: getNonAttendeesError, refresh: getNonAttendeesRefresh } = await useFetch(`/api/members`, {
-    query: { classId, classDate: classDate.value, exclude: true }
+    query: { classId, classDate, exclude: true }
   })
 
   function getDatesFromRecentToStart(startDate: Date, intervalDays: number): Date[] {
@@ -168,14 +168,6 @@
 
     return dates
   }
-
-  const { data: getMembers, error: getMembersError } = await useFetch('/api/members')
-
-  // if (getAttendanceError.value) {
-  //   errorAlert.value.title = getAttendanceError.value?.name
-  //   errorAlert.value.message = getAttendanceError.value?.message
-  //   alertStore.setAlert("error", true)
-  // }
 
   async function addAttendance(attendeeId: string) {
 
@@ -192,12 +184,6 @@
       getAttendeesRefresh()
       getNonAttendeesRefresh()
     }
-
-    // if (addAttedanceError.value) {
-    //   errorAlert.value.title = addAttedanceError.value?.name
-    //   errorAlert.value.message = addAttedanceError.value?.message
-    //   alertStore.setAlert("error", true)
-    // }
 
   }
 
