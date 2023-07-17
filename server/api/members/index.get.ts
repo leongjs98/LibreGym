@@ -3,7 +3,6 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  console.log(query)
 
   try {
     if (query['IDs']) {
@@ -25,13 +24,10 @@ export default defineEventHandler(async (event) => {
     } else if (query['classDate'] && query['classId']) {
       let classDateString = query['classDate'].toString()
       if (classDateString.includes('/')) {
-        // console.log("date includes /")
         classDateString = classDateString.replace(/\//g, '-')
       }
       const classDate = new Date(classDateString)
       const classId = query['classId'].toString()
-
-      // console.log(classDateString, classDate, classId)
 
       const attedanceIDs = await prisma.attendance.findMany({
         where: {
@@ -62,7 +58,6 @@ export default defineEventHandler(async (event) => {
           },
         })
 
-        console.log(nonAttendees.length)
         return nonAttendees 
 
       } else {
@@ -72,7 +67,6 @@ export default defineEventHandler(async (event) => {
           },
         })
 
-        console.log(attendees.length)
         return attendees
       }
 
