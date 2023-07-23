@@ -1,0 +1,27 @@
+[
+  {
+    "name": "MMA Grappling",
+    "instructor": "Coach Linc",
+    "description": "Staying on top, ground and pound, and wall wrestling."
+  },
+  {
+    "name": "MMA Striking",
+    "instructor": "Coach Linc",
+    "description": "Striking in small gloves and when grappling is allowed."
+  },
+  {
+    "name": "No Gi BJJ",
+    "instructor": "Coach Abe",
+    "description": "No Gi Grappling."
+  },
+  {
+    "name": "Gi BJJ",
+    "instructor": "Coach Abe",
+    "description": "Grappling with Gi on."
+  },
+  {
+    "name": "Strength and Conditioning",
+    "instructor": "Coach Abe",
+    "description": "Strength and conditioning for fitness and fighting."
+  }
+]

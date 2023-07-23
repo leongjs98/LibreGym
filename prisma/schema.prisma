@@ -33,34 +33,49 @@ model Member {
 
   Attendance Attendance[]
 
-  // @@unique([fullName, birthday])
+  @@unique([fullName, birthday, phoneNumber])
 }
 
 model Class {
-  id           String   @id @default(uuid())
-  name         String
-  description  String?
-  startDate    DateTime @db.Date()
-  dayOfWeek    Int // Easier searching classes based of DOW
-  startTime    DateTime @db.Time()
-  endTime      DateTime @db.Time()
-  intervalDays Int
+  id          String  @id @default(uuid())
+  name        String
+  instructor  String?
+  description String?
 
+  session Session[]
+
+  @@unique([name])
+}
+
+model Session {
+  id          String   @id @default(uuid())
+  oneTime     Boolean  @default(false)
+  dayOfWeek   Int
+  startTime   DateTime @db.Time()
+  endTime     DateTime @db.Time()
+  description String?
+
+  // Only for one time event or period
+  startDate DateTime? @db.Date()
+  endDate   DateTime? @db.Date()
+
+  class      Class        @relation(fields: [classId], references: [id])
+  classId    String
   Attendance Attendance[]
+
+  @@unique([classId, startDate, startTime])
 }
 
 model Attendance {
-  id        String   @id @default(uuid())
-  classDate DateTime @db.Date()
+  id   String   @id @default(uuid())
+  date DateTime @db.Date()
 
-  attendee   Member @relation(fields: [attendeeId], references: [id])
+  attendee   Member  @relation(fields: [attendeeId], references: [id])
   attendeeId String
-  class      Class  @relation(fields: [classId], references: [id])
-  classId    String
-  // class    Class[]
-  // attendee Member[]
+  session    Session @relation(fields: [sessionId], references: [id])
+  sessionId  String
 
-  @@unique([attendeeId, classId, classDate])
+  @@unique([attendeeId, sessionId, date])
 }
 
 enum Sex {
