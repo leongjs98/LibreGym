@@ -3,10 +3,14 @@
     <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
     <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
     <div>
-      <div class="w-full flex justify-end">
+      <div class="w-full space-x-4 flex justify-end">
         <NuxtLink to="/classes/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
           <IconAddRounded />
           New class
+        </NuxtLink>
+        <NuxtLink to="/classes/sessions/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
+          <IconAddRounded />
+          New session
         </NuxtLink>
       </div>
       <div v-for="(date, i) in datesOfThisWeek" :key="i" class="flex mb-5">
@@ -18,14 +22,14 @@
             {{ getDayOfWeek(date) }}
           </div>
         </div>
-        <div v-for="(classToDisplay, j) in classesSortedByDOW[i]" :key="classToDisplay.id" class="flex">
+        <div v-for="(session, j) in sessionsSortedByDOW[i]" :key="session.id" class="flex">
           <div class="relative flex justify-center items-start py-3 pl-3 border border-gray-300">
             <div>
               <div>
-                {{ classToDisplay.name }}
+                {{ session.name }}
               </div>
               <div>
-                {{ getTime(classToDisplay.startTime) }} - {{ getTime(classToDisplay.endTime) }}
+                {{ getTime(session.startTime) }} - {{ getTime(session.endTime) }}
               </div>
             </div>
             <label :for="'option-'+i+'-'+j" class="ml-3 hover:cursor-pointer">
@@ -33,11 +37,11 @@
             </label>
             <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
             <div class="hidden peer-checked:block absolute z-10 -right-20 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
-              <NuxtLink :to="`/classes/attendance/${classToDisplay.id}`" class="flex items-center gap-1">
+              <NuxtLink :to="`/classes/attendance/${session.id}`" class="flex items-center gap-1">
                 <IconRoundMoreHoriz size="18px" />
                 Details
               </NuxtLink>
-              <NuxtLink :to="`/classes/edit/${classToDisplay.id}`" class="flex items-center gap-1">
+              <NuxtLink :to="`/classes/edit/${session.id}`" class="flex items-center gap-1">
                 <IconEdit size="18px" />
                 Edit
               </NuxtLink>
@@ -48,7 +52,7 @@
               <input type="checkbox" class="hidden peer" :id="`delete-${i}-${j}`">
               <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
                 <h2 class="text-lg font-bold">
-                  Are you sure you want to delete {{ classToDisplay.name }} permanently?
+                  Are you sure you want to delete {{ session.name }} permanently?
                 </h2>
 
                 <p class="mt-2 text-sm text-gray-500">
@@ -57,7 +61,7 @@
 
                 <div class="mt-4 flex gap-2">
                   <button
-                    @click="deleteClass(classToDisplay.id)"
+                    @click="deleteClass(session.id)"
                     :for="`delete-${i}-${j}`"
                     type="button"
                     class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
@@ -89,7 +93,7 @@ const currentDate = new Date()
 const currentDayOfWeek = currentDate.getDay()
 
 const datesOfThisWeek: Date[] = []
-const classesSortedByDOW = ref([ [], [], [], [], [], [], [] ])  // DOW = day of week
+const sessionsSortedByDOW = ref([ [], [], [], [], [], [], [] ])  // DOW = day of week
 
 const infoAlert = ref({
   show: false,
@@ -132,7 +136,7 @@ function getTime(inputTime: Date|string): string {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-const { data: classes, error: getError, refresh: refetchAPI } = await useFetch("/api/classes")
+const { data: classes, error: getError, refresh: refetchAPI } = await useFetch("/api/sessions")
 
 if (getError.value) {
   errorAlert.value.title = getError.value?.name
@@ -141,10 +145,10 @@ if (getError.value) {
 }
 
 async function sortClasses() {
-  classesSortedByDOW.value = [ [], [], [], [], [], [], [] ]
+  sessionsSortedByDOW.value = [ [], [], [], [], [], [], [] ]
   for (var i = 0; i < classes.value.length; i++) {
     const currentClass = classes.value[i]
-    classesSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
+    sessionsSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
   }
 }
 

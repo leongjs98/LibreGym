@@ -1,28 +1,45 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
-  const classToCreate: object = await readBody(event)
+  interface classToCreate {
+    name?: string;
+    instructor?: string | null;
+    description?: string | null;
+  }
 
-  let message: String = ''
+  const classToCreate: classToCreate = await readBody(event)
 
   try {
-    const newClass = await prisma.class.create({
-      // For insomnia JSON array
-      // data: classToCreate[0]
+    // find or create class
+    if (classToCreate["name"]) {
+      const newClass = await prisma.class.upsert({
+        where: {
+          name: classToCreate["name"].toString(),
+        },
+        update: {},
+        create: {
+          name: classToCreate["name"],
+          description: classToCreate["description"],
+          instructor: classToCreate["instructor"],
+        }
+      })
 
-      data: classToCreate
-    })
+      console.log("new class created\n", newClass)
+      return newClass
+    }
 
-    message = `New class, ${newClass.name} created`
+    console.log("No new class created")
+    return "No new class created"
 
-    return newClass
-  } catch (e) {
-    message = e
-    return e
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        throw 'There is a unique constraint violation, a duplicated class session cannot be created.'
+      }
+    }
+    throw err
   } finally {
     await prisma.$disconnect()
-    console.log(message)
   }
 })
-
