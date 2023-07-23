@@ -1,32 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-  const dayOfWeek = parseInt(query.dayofweek)
+export default defineEventHandler(async () => {
 
   try {
-    let classes: Object = {}
-
-    if (query.dayofweek) {
-      classes = await prisma.class.findMany({
-        where: { dayOfWeek: dayOfWeek },
-        orderBy: [
-          { startTime: 'asc' }
-        ]
-      })
-    } else {
-      classes = await prisma.class.findMany({
-        orderBy: [
-          { startTime: "asc" }
-        ]
-      })
-    }
-
+    const classes = await prisma.class.findMany()
     return classes
-
-  } catch (e) {
-    return e
+  } catch (err) {
+    throw err
   } finally {
     await prisma.$disconnect()
   }
