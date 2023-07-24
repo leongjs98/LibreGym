@@ -3,18 +3,19 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
+
   interface sessionInfo {
     id: string;
     classId: string;
     name: string;
     description: string | null;
     instructor: string | null;
-    startDate: Date;
+    oneTime: boolean;
+    startDate: Date | null;
     endDate: Date | null;
     startTime: Date;
     endTime: Date;
     dayOfWeek: number;
-    intervalDays: number;
   }
 
   try {
@@ -23,7 +24,8 @@ export default defineEventHandler(async (event) => {
     })
 
     const dbClass = await prisma.class.findUniqueOrThrow({
-      where: { id: session.classId }
+      where: { id: session.classId },
+      select: { name: true, instructor: true } // Don't want class description
     })
 
     const sessionInfo: sessionInfo = {...session, ...dbClass}

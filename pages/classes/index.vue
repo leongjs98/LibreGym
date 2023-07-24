@@ -8,7 +8,7 @@
           <IconAddRounded />
           New class
         </NuxtLink>
-        <NuxtLink to="/classes/sessions/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
+        <NuxtLink to="/sessions/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
           <IconAddRounded />
           New session
         </NuxtLink>
@@ -41,7 +41,7 @@
                 <IconRoundMoreHoriz size="18px" />
                 Details
               </NuxtLink>
-              <NuxtLink :to="`/classes/edit/${session.id}`" class="flex items-center gap-1">
+              <NuxtLink :to="`/sessions/edit/${session.id}`" class="flex items-center gap-1">
                 <IconEdit size="18px" />
                 Edit
               </NuxtLink>

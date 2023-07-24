@@ -2,32 +2,31 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 interface sessionInfo {
-  name: string;
-  description: string | null;
-  instructor: string | null;
-  startDate: Date;
-  endDate: Date | null;
+  oneTime: boolean;
+  dayOfWeek: number;
   startTime: Date;
   endTime: Date;
-  intervalDays: number;
+  description: string;
 }
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
   const sessionToUpdate: sessionInfo = await readBody(event)
+  const oneTime = sessionToUpdate["oneTime"]
+  const dayOfWeek = sessionToUpdate["dayOfWeek"]
+  const startTime = sessionToUpdate["startTime"]
+  const endTime = sessionToUpdate["endTime"]
+  const description = sessionToUpdate["description"]
 
   try {
-    const startDate = new Date(sessionToUpdate["startDate"])
-    const dayOfWeek = startDate.getDay()
     const updatedSession = await prisma.session.update({
       where: { id },
       data: {
-        startDate,
-        endDate: sessionToUpdate["endDate"],
-        startTime: sessionToUpdate["startTime"],
-        endTime: sessionToUpdate["endTime"],
+        oneTime,
         dayOfWeek,
-        intervalDays: sessionToUpdate["intervalDays"],
+        startTime,
+        endTime,
+        description,
       }
     })
 

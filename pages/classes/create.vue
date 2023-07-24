@@ -17,7 +17,7 @@
           New class
         </h2>
         <p class="text-sm text-gray-500">
-          Go to <NuxtLink to="/classes/sessions/create" class="font-bold hover:text-black">new session</NuxtLink> to add new time schedules.
+          Go to <NuxtLink to="/sessions/create" class="font-bold hover:text-black">new session</NuxtLink> to add new time schedules.
         </p>
       </div>
       <form @submit.prevent="submitForm">
