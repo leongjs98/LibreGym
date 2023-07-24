@@ -20,20 +20,24 @@
         name="minutes"
         class="bg-transparent text-xl appearance-none outline-none mr-4"
       >
-        <option
-          v-for="n in 10"
-          :key="n"
-          :value="n-1"
-        >
-          0{{ n-1 }}
-        </option>
-        <option
-          v-for="n in 50"
-          :key="n"
-          :value="n+9"
-        >
-          {{ n+9 }}
-        </option>
+        <option value="0">00</option>
+        <option value="15">15</option>
+        <option value="30">30</option>
+        <option value="45">45</option>
+        <!-- <option -->
+        <!--   v-for="n in 10" -->
+        <!--   :key="n" -->
+        <!--   :value="n-1" -->
+        <!-- > -->
+        <!--   0{{ n-1 }} -->
+        <!-- </option> -->
+        <!-- <option -->
+        <!--   v-for="n in 50" -->
+        <!--   :key="n" -->
+        <!--   :value="n+9" -->
+        <!-- > -->
+        <!--   {{ n+9 }} -->
+        <!-- </option> -->
       </select>
       <select
         v-model="amPm"
@@ -59,7 +63,7 @@
   const props = defineProps({
     name: { type: String, required: true },
     defaultHours: { type: Number, default: 4 },
-    defaultMinutes: { type: Number, default: 20 },
+    defaultMinutes: { type: Number, default: 30 },
     defaultAmPm: { type: String, default: "am" }
   })
 
