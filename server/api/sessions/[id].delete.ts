@@ -5,11 +5,16 @@ export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
 
   try {
-    const deleteClass = await prisma.class.delete({
+    const deleteSession = await prisma.session.delete({
       where: { id },
     })
 
-    return deleteClass
+    const relatedClassName = await prisma.class.findUniqueOrThrow({
+      where: { id: deleteSession.classId },
+      select: { name: true }
+    })
+
+    return { ...deleteSession, ...relatedClassName }
   } catch (err) {
     throw err
   } finally {

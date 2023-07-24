@@ -152,14 +152,14 @@ async function sortClasses() {
   }
 }
 
-async function deleteClass(classId: String) {
-  const { data: deleteClass, error: deleteError } = await useFetch(`/api/classes/${classId}`, {
+async function deleteClass(sessionId: String) {
+  const { data: deleteClass, error: deleteError } = await useFetch(`/api/sessions/${sessionId}`, {
     method: "delete"
   })
 
   if (deleteClass.value) {
-    infoAlert.value.title = 'Deleted member'
-    infoAlert.value.message = `${deleteClass.value?.name} has been permanently deleted.`
+    infoAlert.value.title = 'Deleted session'
+    infoAlert.value.message = `A session of${deleteClass.value?.name} has been deleted.`
     alertStore.setAlert("info", true)
     await refetchAPI()
     await sortClasses()
