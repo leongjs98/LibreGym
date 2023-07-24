@@ -24,20 +24,6 @@
         <option value="15">15</option>
         <option value="30">30</option>
         <option value="45">45</option>
-        <!-- <option -->
-        <!--   v-for="n in 10" -->
-        <!--   :key="n" -->
-        <!--   :value="n-1" -->
-        <!-- > -->
-        <!--   0{{ n-1 }} -->
-        <!-- </option> -->
-        <!-- <option -->
-        <!--   v-for="n in 50" -->
-        <!--   :key="n" -->
-        <!--   :value="n+9" -->
-        <!-- > -->
-        <!--   {{ n+9 }} -->
-        <!-- </option> -->
       </select>
       <select
         v-model="amPm"
