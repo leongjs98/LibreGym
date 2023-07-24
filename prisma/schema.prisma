@@ -67,15 +67,15 @@ model Session {
 }
 
 model Attendance {
-  id   String   @id @default(uuid())
-  date DateTime @db.Date()
+  id          String   @id @default(uuid())
+  sessionDate DateTime @db.Date()
 
   attendee   Member  @relation(fields: [attendeeId], references: [id])
   attendeeId String
   session    Session @relation(fields: [sessionId], references: [id])
   sessionId  String
 
-  @@unique([attendeeId, sessionId, date])
+  @@unique([attendeeId, sessionId, sessionDate])
 }
 
 enum Sex {

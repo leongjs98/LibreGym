@@ -5,16 +5,16 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
-    if (query["attendeeId"] && query["classId"] && query["classDate"]) {
-      const attendeeId = query["attendeeId"]
-      const classId = query["classId"]
-      const classDate = new Date(query["classDate"])
+    if (query["attendeeId"] && query["sessionId"] && query["sessionDate"]) {
+      const attendeeId = query["attendeeId"].toString()
+      const sessionId = query["sessionId"].toString()
+      const sessionDate = new Date(query["sessionDate"].toString())
       const singleAttendance = await prisma.attendance.findUnique({
         where: {
-          attendeeId_classId_classDate: {
-            attendeeId: attendeeId,
-            classId: classId,
-            classDate: classDate,
+          attendeeId_sessionId_sessionDate: {
+            attendeeId,
+            sessionId,
+            sessionDate,
           }
         },
         select: {

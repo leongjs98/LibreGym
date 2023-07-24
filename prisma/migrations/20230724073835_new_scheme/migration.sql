@@ -34,12 +34,13 @@ CREATE TABLE `Class` (
 -- CreateTable
 CREATE TABLE `Session` (
     `id` VARCHAR(191) NOT NULL,
-    `startDate` DATE NOT NULL,
-    `endDate` DATE NULL,
+    `oneTime` BOOLEAN NOT NULL DEFAULT false,
+    `dayOfWeek` INTEGER NOT NULL,
     `startTime` TIME NOT NULL,
     `endTime` TIME NOT NULL,
-    `dayOfWeek` INTEGER NOT NULL,
-    `intervalDays` INTEGER NOT NULL,
+    `description` VARCHAR(191) NULL,
+    `startDate` DATE NULL,
+    `endDate` DATE NULL,
     `classId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Session_classId_startDate_startTime_key`(`classId`, `startDate`, `startTime`),
@@ -49,11 +50,11 @@ CREATE TABLE `Session` (
 -- CreateTable
 CREATE TABLE `Attendance` (
     `id` VARCHAR(191) NOT NULL,
-    `date` DATE NOT NULL,
+    `sessionDate` DATE NOT NULL,
     `attendeeId` VARCHAR(191) NOT NULL,
     `sessionId` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `Attendance_attendeeId_sessionId_date_key`(`attendeeId`, `sessionId`, `date`),
+    UNIQUE INDEX `Attendance_attendeeId_sessionId_sessionDate_key`(`attendeeId`, `sessionId`, `sessionDate`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

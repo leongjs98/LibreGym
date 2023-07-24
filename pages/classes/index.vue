@@ -36,10 +36,13 @@
               <IconMore2Line />
             </label>
             <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
-            <div class="hidden peer-checked:block absolute z-10 -right-20 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
-              <NuxtLink :to="`/classes/attendance/${session.id}`" class="flex items-center gap-1">
+            <div class="hidden peer-checked:block absolute z-10 w-32 -right-32 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
+              <NuxtLink
+                :to="`/classes/attendance/${session.id}/${date.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })}`"
+                class="flex items-center gap-1"
+              >
                 <IconRoundMoreHoriz size="18px" />
-                Details
+                Attendance
               </NuxtLink>
               <NuxtLink :to="`/sessions/edit/${session.id}`" class="flex items-center gap-1">
                 <IconEdit size="18px" />

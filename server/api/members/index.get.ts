@@ -21,18 +21,18 @@ export default defineEventHandler(async (event) => {
 
       return members
 
-    } else if (query['classDate'] && query['classId']) {
-      let classDateString = query['classDate'].toString()
-      if (classDateString.includes('/')) {
-        classDateString = classDateString.replace(/\//g, '-')
+    } else if (query['sessionDate'] && query['sessionId']) {
+      let sessDateStr = query['sessionDate'].toString()
+      if (sessDateStr.includes('/')) {
+        sessDateStr = sessDateStr.replace(/\//g, '-')
       }
-      const classDate = new Date(classDateString)
-      const classId = query['classId'].toString()
+      const sessionDate = new Date(sessDateStr)
+      const sessionId = query['sessionId'].toString()
 
       const attedanceIDs = await prisma.attendance.findMany({
         where: {
-          classDate,
-          classId
+          sessionDate,
+          sessionId,
         },
         select: {
           attendeeId: true

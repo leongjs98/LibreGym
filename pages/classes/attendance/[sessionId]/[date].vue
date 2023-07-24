@@ -5,24 +5,24 @@
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
-          Attendance: {{ getClass?.name }}
+          {{ getSession?.name }}
         </h2>
-        <p class="text-sm text-gray-500">
-          {{ getClass?.description }}
+        <p class="text-lg">
+          <span class="text-md text-gray-600">Attendance on</span> {{ new Date(sessionDate).toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }) }}
         </p>
       </div>
       <div>
         <div class="flex flex-col items-center space-y-5 p-4 border-b">
-          <label for="classDates" class="block mb-2 font-medium text-gray-900 dark:text-white">Select class date</label>
-          <select v-model="classDate" name="classDates" id="classDates" class="bg-gray-50 border border-gray-300 text-lg text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block md:w-1/2 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option
-              v-for="(d, i) in datesFromStartToNow"
-              :key="i"
-              :value="d.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })"
-            >
-              {{ d.toLocaleString('en', { weekday: 'short' }) }}, {{ d.getDate() }} {{ d.toLocaleString('default', { month: 'long' }) }} {{ d.getFullYear() }}
-            </option>
-          </select>
+          <!-- <label for="classDates" class="block mb-2 font-medium text-gray-900 dark:text-white">Select class date</label> -->
+          <!-- <select v-model="sessionDate" name="classDates" id="classDates" class="bg-gray-50 border border-gray-300 text-lg text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block md:w-1/2 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
+          <!--   <option -->
+          <!--     v-for="(d, i) in datesFromStartToNow" -->
+          <!--     :key="i" -->
+          <!--     :value="d.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })" -->
+          <!--   > -->
+          <!--     {{ d.toLocaleString('en', { weekday: 'short' }) }}, {{ d.getDate() }} {{ d.toLocaleString('default', { month: 'long' }) }} {{ d.getFullYear() }} -->
+          <!--   </option> -->
+          <!-- </select> -->
           <div class="flex flex-col bg-white shadow-lg rounded space-y-4 md:w-1/2 w-full p-5">
             <div class="flex items-center">
               <label for="attendees-search" class="sr-only">Search</label>
@@ -108,14 +108,14 @@
       </div>
     </div>
 
-
   </div>
 </template>
 
 <script setup lang="ts">
   import { useAlertStore } from '@/store/alertStore';
 
-  const classId = useRoute().params.id
+  const sessionId = useRoute().params.sessionId
+  const sessionDate = useRoute().params.date
   const alertStore = useAlertStore()
 
   const successAlert = ref({
@@ -134,40 +134,38 @@
 
   const openModal = ref(false)
 
-  const { data: getClass, error: getClassError } = await useFetch(`/api/classes/${classId}`, {
-    pick: ['name', 'startDate', 'intervalDays', 'description']
-  })
+  const { data: getSession, error: getSessionError } = await useFetch(`/api/sessions/${sessionId}`)
 
-  if (getClassError.value) {
-    errorAlert.value.title = getClassError.value?.name
-    errorAlert.value.message = getClassError.value?.message
+  if (getSessionError.value) {
+    errorAlert.value.title = getSessionError.value?.name
+    errorAlert.value.message = getSessionError.value?.message
     alertStore.setAlert("error", true)
   }
 
-  const datesFromStartToNow = getDatesFromRecentToStart(getClass.value?.startDate, getClass.value?.intervalDays)
+  // const datesFromStartToNow = getDatesFromRecentToStart(getSession.value?.startDate, getSession.value?.intervalDays)
   // 'en-CA' returns YYYY-mm-dd
-  const classDate = ref(datesFromStartToNow[0].toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }))
+  // const sessionDate = ref(datesFromStartToNow[0].toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }))
 
   const { data: getAttendees, error: getAttendeesError, refresh: getAttendeesRefresh } = await useFetch(`/api/members`, {
-    query: { classId, classDate }
+    query: { sessionId, sessionDate }
   })
 
   const { data: getNonAttendees, error: getNonAttendeesError, refresh: getNonAttendeesRefresh } = await useFetch(`/api/members`, {
-    query: { classId, classDate, exclude: true }
+    query: { sessionId, sessionDate, exclude: true }
   })
 
-  function getDatesFromRecentToStart(startDate: Date, intervalDays: number): Date[] {
-    const dates: Date[] = []
-    let startDateMs = new Date(startDate).getTime()
-    const currentDateMs = new Date().getTime()
-
-    while (startDateMs <= currentDateMs) {
-      dates.unshift(new Date(startDateMs))
-      startDateMs = startDateMs + (intervalDays * 24 * 60 * 60 * 1000)
-    }
-
-    return dates
-  }
+  // function getDatesFromRecentToStart(startDate: Date, intervalDays: number): Date[] {
+  //   const dates: Date[] = []
+  //   let startDateMs = new Date(startDate).getTime()
+  //   const currentDateMs = new Date().getTime()
+  //
+  //   while (startDateMs <= currentDateMs) {
+  //     dates.unshift(new Date(startDateMs))
+  //     startDateMs = startDateMs + (intervalDays * 24 * 60 * 60 * 1000)
+  //   }
+  //
+  //   return dates
+  // }
 
   async function addAttendance(attendeeId: string) {
 
@@ -175,8 +173,8 @@
       method: "post",
       body: {
         attendeeId,
-        classId,
-        classDate: new Date(classDate.value)
+        sessionId,
+        sessionDate
       }
     })
 
@@ -190,11 +188,7 @@
   async function deleteAttendance(attendeeId: string) {
 
     const { data: singleAttendanceId } = await useFetch(`/api/attendances/`, {
-      query: {
-        classId,
-        classDate: classDate.value,
-        attendeeId
-      }
+      query: { sessionId, sessionDate, attendeeId }
     })
 
     if (singleAttendanceId.value) {
@@ -204,15 +198,12 @@
       if (deleteAttendance.value) {
         getAttendeesRefresh()
         getNonAttendeesRefresh()
+      } else if (deleteAttendanceError.value) {
+        errorAlert.value.title = deleteAttendanceError.value?.name
+        errorAlert.value.message = deleteAttendanceError.value?.message
+        alertStore.setAlert("error", true)
       }
     }
-
-    if (deleteAttendanceError.value) {
-      errorAlert.value.title = deleteAttendanceError.value?.name
-      errorAlert.value.message = deleteAttendanceError.value?.message
-      alertStore.setAlert("error", true)
-    }
-
   }
 
 </script>
