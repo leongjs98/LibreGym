@@ -6,7 +6,7 @@
       <NuxtLink to="/classes/" class="flex items-center w-fit px-4 py-2 mb-6 border-2 border-gray-500 rounded">
         View classes
       </NuxtLink>
-      <NuxtLink to="/classes/sessions/create" class="flex items-center w-fit px-4 py-2 mb-6 border-2 border-gray-500 rounded">
+      <NuxtLink to="/sessions/create" class="flex items-center w-fit px-4 py-2 mb-6 border-2 border-gray-500 rounded">
         <IconAddRounded />
         New session
       </NuxtLink>

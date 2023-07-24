@@ -159,7 +159,7 @@ async function deleteClass(sessionId: String) {
 
   if (deleteClass.value) {
     infoAlert.value.title = 'Deleted session'
-    infoAlert.value.message = `A session of${deleteClass.value?.name} has been deleted.`
+    infoAlert.value.message = `A session of ${deleteClass.value?.name} has been deleted.`
     alertStore.setAlert("info", true)
     await refetchAPI()
     await sortClasses()
