@@ -4,7 +4,9 @@ const prisma = new PrismaClient()
 export default defineEventHandler(async () => {
 
   try {
-    const classes = await prisma.class.findMany()
+    const classes = await prisma.class.findMany({
+      orderBy: { name: "asc" }
+    })
     return classes
   } catch (err) {
     throw err
