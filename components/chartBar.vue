@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <client-only placeholder="Loading...">
       <Bar
         :data="data"
@@ -25,17 +25,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
   title: { type: String, default: "" },
-  chartData: { type: Object, required: true },
+  chartData: { type: Array, required: true },
 })
 
 const labelsArr: Array<any> = [];
 const dataArr: Array<any> = [];
 
-for (const key in props.chartData) {
-  if (Object.prototype.hasOwnProperty.call(props.chartData, key)) {
-    labelsArr.push(key)
-    dataArr.push(props.chartData[key])
-  }
+for (let i = 0; i < props.chartData.length; i++) {
+  labelsArr.push(props.chartData[i]?.name)
+  dataArr.push(props.chartData[i]?.value)
 }
 
 const data = ref({
@@ -49,6 +47,7 @@ const data = ref({
 })
 
 const options = ref({
-  responsive: true
+  responsive: true,
+  indexAxis: 'y'
 })
 </script>

@@ -139,7 +139,7 @@ function getTime(inputTime: Date|string): string {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-const { data: classes, error: getError, refresh: refetchAPI } = await useFetch("/api/sessions")
+const { data: sessions, error: getError, refresh: refetchAPI } = await useFetch("/api/sessions")
 
 if (getError.value) {
   errorAlert.value.title = getError.value?.name
@@ -149,8 +149,8 @@ if (getError.value) {
 
 async function sortClasses() {
   sessionsSortedByDOW.value = [ [], [], [], [], [], [], [] ]
-  for (var i = 0; i < classes.value.length; i++) {
-    const currentClass = classes.value[i]
+  for (var i = 0; i < sessions.value.length; i++) {
+    const currentClass = sessions.value[i]
     sessionsSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
   }
 }

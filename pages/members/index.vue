@@ -77,10 +77,10 @@
             </td>
             <input type="checkbox" class="hidden peer" :id="'option-'+i" />
             <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
-              <!-- <button class="flex items-center gap-1"> -->
-              <!--   <IconRoundMoreHoriz size="18px" /> -->
-              <!--   more -->
-              <!-- </button> -->
+              <NuxtLink :to="`/members/attendance/${member.id}`" class="flex items-center gap-1">
+                <IconRoundMoreHoriz size="18px" />
+                Attendance
+              </NuxtLink>
               <NuxtLink :to="`/members/edit/${member.id}`" class="flex items-center gap-1">
                 <IconEdit size="18px" />
                 Edit
