@@ -33,7 +33,8 @@ model Member {
 
   Attendance Attendance[]
 
-  @@unique([fullName, birthday, phoneNumber])
+  // @@unique([fullName, birthday, phoneNumber])
+  @@unique([fullName, birthday])
 }
 
 model Class {
@@ -63,7 +64,7 @@ model Session {
   classId    String
   Attendance Attendance[]
 
-  @@unique([classId, startDate, startTime])
+  @@unique([classId, dayOfWeek, startTime])
 }
 
 model Attendance {
