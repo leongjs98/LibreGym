@@ -1,7 +1,8 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
-    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
+    <transition name="toast">
+      <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
+    </transition>
     <div>
       <div class="w-full space-x-4 flex justify-end">
         <NuxtLink to="/classes/create" class="flex items-center w-fit px-4 py-2 mb-8 border-2 border-gray-500 rounded">
@@ -32,15 +33,15 @@
                 {{ getTime(session.startTime) }} - {{ getTime(session.endTime) }}
               </div>
             </div>
-            <label :for="'option-'+i+'-'+j" class="ml-3 hover:cursor-pointer">
+            <label :for="'option-' + i + '-' + j" class="ml-3 hover:cursor-pointer">
               <IconMore2Line />
             </label>
-            <input type="checkbox" name="" class="hidden peer" :id="'option-'+i+'-'+j">
-            <div class="hidden peer-checked:block absolute z-10 w-32 -right-32 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
+            <input type="checkbox" name="" class="hidden peer" :id="'option-' + i + '-' + j">
+            <div
+              class="hidden peer-checked:block absolute z-10 w-32 -right-32 p-2 ml-5 rounded border border-gray-500 bg-gray-100">
               <NuxtLink
                 :to="`/classes/attendance/${session.id}/${date.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })}`"
-                class="flex items-center gap-1"
-              >
+                class="flex items-center gap-1">
                 <IconRoundMoreHoriz size="18px" />
                 Attendance
               </NuxtLink>
@@ -53,29 +54,21 @@
                 Delete
               </label>
               <input type="checkbox" class="hidden peer" :id="`delete-${i}-${j}`">
-              <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
-                <h2 class="text-lg font-bold">
-                  Are you sure you want to delete {{ session.name }} permanently?
-                </h2>
-
-                <p class="mt-2 text-sm text-gray-500">
-                  Doing this will delete the class permanently, are you 100% sure it's OK?
+              <div
+                class="hidden peer-checked:flex flex-col justify-between items-center fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
+                <p class="text-lg font-bold">
+                  Delete this session of {{ session.name }} ({{ getTime(session.startTime) }} - {{
+                    getTime(session.endTime) }} {{ getDayOfWeek(date) }}) permanently?
                 </p>
 
                 <div class="mt-4 flex gap-2">
-                  <button
-                    @click="deleteClass(session.id)"
-                    :for="`delete-${i}-${j}`"
-                    type="button"
-                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
-                  >
+                  <button @click="deleteClass(session.id)" :for="`delete-${i}-${j}`" type="button"
+                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600">
                     Yes, I'm sure
                   </button>
 
-                  <label
-                    :for="`delete-${i}-${j}`"
-                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600"
-                  >
+                  <label :for="`delete-${i}-${j}`"
+                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600">
                     No, go back
                   </label>
                 </div>
@@ -89,30 +82,19 @@
 </template>
 
 <script setup lang="ts">
-import { useAlertStore } from '@/store/alertStore';
-const alertStore = useAlertStore()
 
 const currentDate = new Date()
 const currentDayOfWeek = currentDate.getDay()
 
 const datesOfThisWeek: Date[] = []
-const sessionsSortedByDOW = ref([ [], [], [], [], [], [], [] ])  // DOW = day of week
+const sessionsSortedByDOW = ref([[], [], [], [], [], [], []])  // DOW = day of week
 
-const infoAlert = ref({
-  show: false,
-  title: '',
-  message: '',
-  color: 'blue'
-})
+const showToast = ref(false)
+const toastType = ref('info')
+const toastTitle = ref('default title')
+const toastMsg = ref('default message')
 
-const errorAlert = ref({
-  show: false,
-  title: '',
-  message: '',
-  color: 'red'
-})
-
-for (let i=0; i<7; i++) {
+for (let i = 0; i < 7; i++) {
   const tempDOW = new Date()
   tempDOW.setDate(currentDate.getDate() + (i - currentDayOfWeek))
   datesOfThisWeek.push(tempDOW)
@@ -134,7 +116,7 @@ function getDayOfWeek(date: Date): string {
 }
 
 // E.g. 06:09 PM
-function getTime(inputTime: Date|string): string {
+function getTime(inputTime: Date | string): string {
   const time = new Date(inputTime)
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
@@ -142,13 +124,19 @@ function getTime(inputTime: Date|string): string {
 const { data: sessions, error: getError, refresh: refetchAPI } = await useFetch("/api/sessions")
 
 if (getError.value) {
-  errorAlert.value.title = getError.value?.name
-  errorAlert.value.message = getError.value?.message
-  alertStore.setAlert("error", true)
+  triggerToast({
+    type: 'error',
+    title: 'Something went wrong with the db',
+    msg: getError.value?.message,
+    showToast,
+    toastType,
+    toastTitle,
+    toastMsg,
+  })
 }
 
 async function sortClasses() {
-  sessionsSortedByDOW.value = [ [], [], [], [], [], [], [] ]
+  sessionsSortedByDOW.value = [[], [], [], [], [], [], []]
   for (var i = 0; i < sessions.value.length; i++) {
     const currentClass = sessions.value[i]
     sessionsSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
@@ -161,15 +149,27 @@ async function deleteClass(sessionId: String) {
   })
 
   if (deleteClass.value) {
-    infoAlert.value.title = 'Deleted session'
-    infoAlert.value.message = `A session of ${deleteClass.value?.name} has been deleted.`
-    alertStore.setAlert("info", true)
+    triggerToast({
+      type: 'info',
+      title: 'Deleted session',
+      msg: `A session of ${deleteClass.value?.name} has been deleted.`,
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
+    })
     await refetchAPI()
     await sortClasses()
   } else if (deleteError.value) {
-    errorAlert.value.title = deleteError.value?.name
-    errorAlert.value.message = deleteError.value?.message
-    alertStore.setAlert("error", true)
+    triggerToast({
+      type: 'error',
+      title: deleteError.value?.name,
+      msg: deleteError.value?.message,
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
+    })
   }
 }
 

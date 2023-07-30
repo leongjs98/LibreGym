@@ -1,7 +1,7 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" />
-    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
+    <!-- <StickyAlert name="success" :title="successAlert.title" :message="successAlert.message" :color="successAlert.color" /> -->
+    <!-- <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" /> -->
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -157,25 +157,25 @@
 <script setup lang="ts">
   import { useDateStore } from '~/store/dateStore';
   import { useTimeStore } from '~/store/timeStore';
-  import { useAlertStore } from '@/store/alertStore';
+  // import { useAlertStore } from '@/store/alertStore';
 
   const dateStore = useDateStore()
   const timeStore = useTimeStore()
-  const alertStore = useAlertStore()
+  // const alertStore = useAlertStore()
 
-  const successAlert = ref({
-    show: false,
-    title: '',
-    message: '',
-    color: 'green'
-  })
-
-  const errorAlert = ref({
-    show: false,
-    title: '',
-    message: '',
-    color: 'red'
-  })
+  // const successAlert = ref({
+  //   show: false,
+  //   title: '',
+  //   message: '',
+  //   color: 'green'
+  // })
+  //
+  // const errorAlert = ref({
+  //   show: false,
+  //   title: '',
+  //   message: '',
+  //   color: 'red'
+  // })
 
   enum ClassFrequency {
     Weekly,
@@ -190,9 +190,9 @@
   console.log(getSession)
 
   if (getSessionError.value) {
-    errorAlert.value.title = getSessionError.value?.name
-    errorAlert.value.message = getSessionError.value?.message
-    alertStore.setAlert("error", true)
+    // errorAlert.value.title = getSessionError.value?.name
+    // errorAlert.value.message = getSessionError.value?.message
+    // alertStore.setAlert("error", true)
   }
 
   const createNewClass = ref(false)
@@ -271,13 +271,13 @@
     })
 
     if (updateClass.value) {
-      successAlert.value.title = 'Updated class'
-      successAlert.value.message = `${updateClass.value?.name} has been updated.`
-      alertStore.setAlert("success", true)
+      // successAlert.value.title = 'Updated class'
+      // successAlert.value.message = `${updateClass.value?.name} has been updated.`
+      // alertStore.setAlert("success", true)
     } else if (updateError.value) {
-      errorAlert.value.title = updateError.value?.name
-      errorAlert.value.message = updateError.value?.message
-      alertStore.setAlert("error", true)
+      // errorAlert.value.title = updateError.value?.name
+      // errorAlert.value.message = updateError.value?.message
+      // alertStore.setAlert("error", true)
     }
   }
 </script>

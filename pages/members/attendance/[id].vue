@@ -1,13 +1,15 @@
 <template>
   <div class="py-16 max-w-4xl px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
+    <transition name="toast">
+      <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
+    </transition>
     <div class="bg-white divide-y-2 w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
-          Attendance: {{ getMember.fullName }}
+          Attendance: {{ getMember?.fullName }}
         </h2>
         <p class="text-sm text-gray-500">
-          {{ getMember.id }}
+          {{ getMember?.id }}
         </p>
       </div>
       <div
@@ -18,54 +20,58 @@
       <div
         class="flex items-center justify-between bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 w-full">
         <div class="text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">Avg sessions per week</div>
-        <p class="text-xl font-bold text-right">{{ getAttendance?.avgAttendancePerWeek.toFixed(2) }}</p>
+        <p class="text-xl font-bold text-right">{{ getAttendance?.avgAttendancePerWeek }}</p>
       </div>
       <div
         class="flex items-center justify-between bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 w-full">
         <div class="text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">First attendance:</div>
-        <p class="text-xl font-bold text-right">{{ formatDate(new Date(getAttendance?.firstSessDate)) }}</p>
+        <p class="text-xl font-bold text-right">{{ formatDate(getAttendance?.firstSessDate) }}</p>
       </div>
       <div
         class="flex items-center justify-between bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 w-full">
         <div class="text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">Last attendance:</div>
-        <p class="text-xl font-bold text-right">{{ formatDate(new Date(getAttendance?.lastSessDate)) }}</p>
+        <p class="text-xl font-bold text-right">{{ formatDate(getAttendance?.lastSessDate) }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useDateStore } from "@/store/dateStore"
-import { useAlertStore } from "@/store/alertStore"
-import { storeToRefs } from "pinia";
-
-const dateStore = useDateStore()
-const alertStore = useAlertStore()
 
 const id = useRoute().params.id
 
-const errorAlert = ref({
-  show: false,
-  title: '',
-  message: '',
-  color: 'red'
-})
+const showToast = ref(false)
+const toastType = ref('info')
+const toastTitle = ref('default title')
+const toastMsg = ref('default message')
 
-const { data: getMember, error: getMemberErr } = await useFetch(`/api/members/${id}`, {
-  pick: ['fullName', 'id']
-})
+const { data: getMember, error: getMemberErr } = await useFetch(`/api/members/${id}`)
 
 if (getMemberErr.value) {
-  errorAlert.value.title = getMemberErr.value.name
-  errorAlert.value.message = 'Failed to retrieve data' + getMemberErr.value.message
-  alertStore.setAlert("error", true)
+  triggerToast({
+    type: 'error',
+    title: "Can't get the member's info",
+    msg: getMemberErr.value?.message,
+    showToast,
+    toastType,
+    toastTitle,
+    toastMsg,
+  })
 }
 
 const { data: getAttendance, error: getAttendanceErr } = await useFetch(`/api/members/attendance/${id}`)
 
-if (getAttendanceErr.value) {
-  errorAlert.value.title = getAttendanceErr.value.name
-  errorAlert.value.message = 'Failed to retrieve data' + getAttendanceErr.value.message
-  alertStore.setAlert("error", true)
+if (!getMemberErr.value) {
+  if (getAttendanceErr.value) {
+    triggerToast({
+      type: 'error',
+      title: 'Something went wrong with the db',
+      msg: getAttendanceErr.value?.message,
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
+    })
+  }
 }
 </script>

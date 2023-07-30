@@ -1,21 +1,29 @@
 <template>
   <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
-    <StickyAlert name="info" :title="infoAlert.title" :message="infoAlert.message" :color="infoAlert.color" />
-    <StickyAlert name="error" :title="errorAlert.title" :message="errorAlert.message" :color="errorAlert.color" />
+    <transition name="toast">
+      <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
+    </transition>
     <div>
       <div class="w-full flex justify-between items-end mb-8">
         <div class="flex gap-3 items-center">
           <p class="text-xl border-b">
-            Member: 
+            Member:
             <b>{{ members?.length }}</b>
           </p>
           <div class="flex items-center">
             <label for="search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"></path>
+                </svg>
               </div>
-              <input type="text" id="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search">
+              <input type="text" id="search"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search">
             </div>
           </div>
         </div>
@@ -36,9 +44,7 @@
           </tr>
         </thead>
         <tbody class="">
-          <tr v-for="member,i in members" :id="member.id" :key="member.id"
-            class="hover:bg-gray-100"
-          >
+          <tr v-for="member, i in members" :id="member.id" :key="member.id" class="hover:bg-gray-100">
             <td class="px-3 py-2 font-normal">
               <div class="text-left">{{ member.fullName }}</div>
               <div class="text-left">
@@ -52,14 +58,15 @@
               <div class="text-left">{{ member.phoneNumber }}</div>
             </td>
             <td class="py-2 font-normal">
-              <div v-if="member.status =='member'" class="mx-auto px-3 py-1.5 w-fit">
-                 {{ member.status }}
+              <div v-if="member.status == 'member'" class="mx-auto px-3 py-1.5 w-fit">
+                {{ member.status }}
               </div>
-              <div v-else-if="member.status =='trial'" class="mx-auto px-3 py-1.5 w-fit">
-                 {{ member.status }}
+              <div v-else-if="member.status == 'trial'" class="mx-auto px-3 py-1.5 w-fit">
+                {{ member.status }}
               </div>
-              <div v-else-if="member.status =='enquiry'" class="rounded mx-auto px-3 py-1.5 w-fit text-yellow-900 bg-yellow-200">
-                 {{ member.status }}
+              <div v-else-if="member.status == 'enquiry'"
+                class="rounded mx-auto px-3 py-1.5 w-fit text-yellow-900 bg-yellow-200">
+                {{ member.status }}
               </div>
             </td>
             <td class="py-2 font-normal">
@@ -71,11 +78,11 @@
               </div>
             </td>
             <td class="">
-              <label :for="'option-'+i" class="hover:cursor-pointer">
+              <label :for="'option-' + i" class="hover:cursor-pointer">
                 <IconMore2Line />
               </label>
             </td>
-            <input type="checkbox" class="hidden peer" :id="'option-'+i" />
+            <input type="checkbox" class="hidden peer" :id="'option-' + i" />
             <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
               <NuxtLink :to="`/members/attendance/${member.id}`" class="flex items-center gap-1">
                 <IconRoundMoreHoriz size="18px" />
@@ -85,12 +92,13 @@
                 <IconEdit size="18px" />
                 Edit
               </NuxtLink>
-              <label :for="'delete-'+i" class="flex items-center gap-1 cursor-pointer">
+              <label :for="'delete-' + i" class="flex items-center gap-1 cursor-pointer">
                 <IconDeleteForeverSharp size="18px" />
                 Delete
               </label>
-              <input type="checkbox" class="hidden peer" :id="'delete-'+i">
-              <div class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
+              <input type="checkbox" class="hidden peer" :id="'delete-' + i">
+              <div
+                class="hidden peer-checked:block fixed top-1/2 left-1/2 w-72 h-64 -ml-36 -mt-32 rounded-lg bg-white p-8 shadow-2xl">
                 <h2 class="text-lg font-bold">
                   Are you sure you want to delete {{ member.fullName }} permanently?
                 </h2>
@@ -100,18 +108,13 @@
                 </p>
 
                 <div class="mt-4 flex gap-2">
-                  <button
-                    @click="deleteMember(member.id)"
-                    type="button"
-                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600"
-                  >
+                  <button @click="deleteMember(member.id)" type="button"
+                    class="rounded bg-red-50 px-4 py-2 text-sm font-medium text-red-600">
                     Yes, I'm sure
                   </button>
 
-                  <label
-                    :for="'delete-'+i"
-                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600"
-                  >
+                  <label :for="'delete-' + i"
+                    class="cursor-pointer rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600">
                     No, go back
                   </label>
                 </div>
@@ -126,47 +129,53 @@
 </template>
 
 <script setup lang="ts">
-  import { useAlertStore } from '~/store/alertStore';
 
-  const alertStore = useAlertStore()
+const showToast = ref(false)
+const toastType = ref('info')
+const toastTitle = ref('default title')
+const toastMsg = ref('default message')
 
-  const infoAlert = ref({
-    show: false,
-    title: '',
-    message: '',
-    color: 'blue'
+// TODO: Interactive search member function (use for loop to access members.value[i])
+const { data: members, error: getError, refresh } = await useFetch('/api/members')
+
+if (getError.value) {
+  triggerToast({
+    type: 'error',
+    title: 'Something went wrong with the db',
+    msg: getError.value?.message,
+    showToast,
+    toastType,
+    toastTitle,
+    toastMsg,
+  })
+}
+
+async function deleteMember(memberId: String) {
+  const { data: deletedMember, error: deleteError } = await useFetch(`/api/members/${memberId}`, {
+    method: "delete"
   })
 
-  const errorAlert = ref({
-    show: false,
-    title: '',
-    message: '',
-    color: 'red'
-  })
-
-  // TODO: Interactive search member function (use for loop to access members.value[i])
-  const { data: members, error: getError, refresh } = await useFetch('/api/members')
-
-  if (getError.value) {
-    errorAlert.value.title = getError.value?.name
-    errorAlert.value.message = getError.value?.message
-    alertStore.setAlert("error", true)
-  }
-
-  async function deleteMember(memberId: String) {
-    const { data: deletedMember, error: deleteError } = await useFetch(`/api/members/${memberId}`, {
-      method: "delete"
+  if (deletedMember.value) {
+    triggerToast({
+      type: 'info',
+      title: 'Deleted member',
+      msg: `${deletedMember.value?.fullName} has been deleted`,
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
     })
-
-    if (deletedMember.value) {
-      infoAlert.value.title = 'Deleted member'
-      infoAlert.value.message = `${deletedMember.value?.fullName} has been deleted`
-      alertStore.setAlert("info", true)
-    } else if (deleteError.value) {
-      errorAlert.value.title = deleteError.value?.name
-      errorAlert.value.message = deleteError.value?.message
-      alertStore.setAlert("error", true)
-    }
-    refresh()
+  } else if (deleteError.value) {
+    triggerToast({
+      type: 'error',
+      title: deleteError.value?.name,
+      msg: deleteError.value?.message,
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
+    })
   }
+  refresh()
+}
 </script>
