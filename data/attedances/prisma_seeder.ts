@@ -1,13 +1,20 @@
+// import { argv } from 'node:process';
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
+// argv.forEach((val, i) => {
+//   console.log(val, typeof(val))
+// })
+
 async function main() {
+  console.log("---------------------------------Deleting Attendance---------------------------------")
   prisma.attendance.deleteMany()
 
   const members = await prisma.member.findMany()
-    
   const today = new Date()
+
+  console.log("---------------------------------Creating Attedances---------------------------------")
   for (let i = 0; i < 7; i++) {
     // Get dates of the current week (Thought of this on my own, I am a genius)
     const sessionDate = new Date(today.setUTCHours((i - today.getUTCDay()) * 24, 0, 0, 0))
@@ -32,10 +39,10 @@ async function main() {
             }
           })
 
-          console.log(`${members[k].fullName} attended ${sessionId} on ${sessionDate}`)
-          console.log(attendance)
+          // console.log(`${members[k].fullName} attended ${sessionId} on ${sessionDate}`)
+          // console.log(attendance)
         } else {
-          console.log('nope')
+          // console.log('nope')
         }
       }
     }

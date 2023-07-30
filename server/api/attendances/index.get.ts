@@ -81,8 +81,7 @@ export default defineEventHandler(async (event) => {
       return classAttendance
     }
   } catch (e) {
-    console.log(e)
-    return e
+    throw e
   } finally {
     await prisma.$disconnect()
   }

@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seedall": "ts-node-esm ./data/classes/prisma_seeder.ts && ts-node-esm ./data/members/prisma_seeder.ts && ts-node-esm ./data/attedances/prisma_seeder.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

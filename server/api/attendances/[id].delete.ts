@@ -9,11 +9,9 @@ export default defineEventHandler(async (event) => {
       where: { id },
     })
 
-    console.log(`Delete attedance.\n${deleteAttendance}`)
     return deleteAttendance
   } catch (e) {
-    console.log(e)
-    return e
+    throw e
   } finally {
     await prisma.$disconnect()
   }

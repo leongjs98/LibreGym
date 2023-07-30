@@ -62,8 +62,11 @@ for (let i = 0; i < NUMBER_OF_MEMBERS; i++) {
 }
 
 async function main() {
+  console.log("---------------------------------Deleting existing attendances and members---------------------------------")
+  await prisma.attendance.deleteMany()
   await prisma.member.deleteMany()
 
+  console.log("---------------------------------Creating members.---------------------------------")
   await prisma.member.createMany({
     data: members
   })
