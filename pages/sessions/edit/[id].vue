@@ -45,16 +45,16 @@
                     class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Weekly</label>
                 </div>
               </li>
-              <li class="w-28 border-b border-gray-200 dark:border-gray-600">
-                <div class="flex items-center pl-3">
-                  <input :value="ClassMode.OneTime" disabled id="one-time-class" type="radio" v-model="classMode"
-                    name="list-radio"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    required>
-                  <label for="one-time-class"
-                    class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">One-time</label>
-                </div>
-              </li>
+              <!-- <li class="w-28 border-b border-gray-200 dark:border-gray-600"> -->
+              <!--   <div class="flex items-center pl-3"> -->
+              <!--     <input :value="ClassMode.OneTime" disabled id="one-time-class" type="radio" v-model="classMode" -->
+              <!--       name="list-radio" -->
+              <!--       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" -->
+              <!--       required> -->
+              <!--     <label for="one-time-class" -->
+              <!--       class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">One-time</label> -->
+              <!--   </div> -->
+              <!-- </li> -->
             </ul>
           </div>
         </div>
@@ -77,19 +77,20 @@
           </div>
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Time*
-          </p>
+          <div class="flex justify-between items items-center">
+            <h2 class="text-gray-600">
+              Time*
+            </h2>
+            <p v-show="!validTime" class="text-sm text-red-700 sm:mr-4">Time entered is invalid</p>
+          </div>
           <div class="flex flex-col items-start sm:flex-row sm:items-center gap-6">
             <div class="flex items-center gap-6">
               <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">From</h4>
-              <inputTime name="startTime" :default-hours="startTime?.hours" :default-minutes="startTime?.mins"
-                :default-am-pm="startTime?.am ? 'am' : 'pm'" />
+              <inputTime @time-changed="(e) => runUpdateTime(e)" name="startTime" :default-time="startTime" />
             </div>
             <div class="flex items-center gap-6">
               <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">To</h4>
-              <inputTime name="endTime" :default-hours="endTime?.hours" :default-minutes="endTime?.mins"
-                :default-am-pm="endTime?.am ? 'am' : 'pm'" />
+              <inputTime @time-changed="(e) => runUpdateTime(e)" name="endTime" :default-time="endTime" />
             </div>
           </div>
         </div>
@@ -110,9 +111,6 @@
 </template>
 
 <script setup lang="ts">
-import { useTimeStore } from '@/store/timeStore';
-
-const timeStore = useTimeStore()
 
 const showToast = ref(false)
 const toastType = ref('info')
@@ -132,9 +130,10 @@ const className = ref(getSessions.value?.name)
 const oneTime = ref(getSessions.value?.oneTime)
 const classMode = ref(getSessions.value?.oneTime ? ClassMode.OneTime : ClassMode.Weekly)
 const dayOfWeek = ref(getSessions.value?.dayOfWeek)
+const validTime = ref(true)
+const startTime = ref(new Date(getSessions.value?.startTime))
+const endTime = ref(new Date(getSessions.value?.endTime))
 const description = ref(getSessions.value?.description)
-const startTime = dateStrTo12h(getSessions.value?.startTime)
-const endTime = dateStrTo12h(getSessions.value?.endTime)
 
 async function submitForm() {
   if ((dayOfWeek.value == 0 || dayOfWeek.value) && className.value) {
@@ -157,10 +156,10 @@ async function submitForm() {
         method: "put",
         body: {
           oneTime,
-          dayOfWeek,
-          startTime: timeStore.times["startTime"],
-          endTime: timeStore.times["endTime"],
-          description,
+          dayOfWeek: dayOfWeek.value,
+          startTime: startTime.value,
+          endTime: endTime.value,
+          description: description.value,
         }
       })
 
@@ -189,5 +188,10 @@ async function submitForm() {
     }
   }
 }
+
+function runUpdateTime(event: { name: string, time: Date }) {
+  updateTime({ event, startTime, endTime, validTime })
+}
+
 </script>
 

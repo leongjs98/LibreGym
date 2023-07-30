@@ -14,9 +14,9 @@
     </div>
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
-        <h2 class="text-2xl ">
+        <h1 class="text-2xl ">
           New Session
-        </h2>
+        </h1>
         <p class="text-sm text-gray-500">
           Go to <NuxtLink to="/classes/create" class="font-bold hover:text-black">new class</NuxtLink> to add more class
           name
@@ -53,16 +53,16 @@
                     class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Weekly</label>
                 </div>
               </li>
-              <li class="w-28 border-b border-gray-200 dark:border-gray-600">
-                <div class="flex items-center pl-3">
-                  <input :value="ClassMode.OneTime" disabled id="one-time-class" type="radio" v-model="classMode"
-                    name="list-radio"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    required>
-                  <label for="one-time-class"
-                    class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">One-time</label>
-                </div>
-              </li>
+              <!-- <li class="w-28 border-b border-gray-200 dark:border-gray-600"> -->
+              <!--   <div class="flex items-center pl-3"> -->
+              <!--     <input :value="ClassMode.OneTime" disabled id="one-time-class" type="radio" v-model="classMode" -->
+              <!--       name="list-radio" -->
+              <!--       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" -->
+              <!--       required> -->
+              <!--     <label for="one-time-class" -->
+              <!--       class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">One-time</label> -->
+              <!--   </div> -->
+              <!-- </li> -->
             </ul>
           </div>
         </div>
@@ -85,17 +85,20 @@
           </div>
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Time*
-          </p>
+          <div class="flex justify-between items items-center">
+            <h2 class="text-gray-600">
+              Time*
+            </h2>
+            <p v-show="!validTime" class="text-sm text-red-700 sm:mr-4">Time entered is invalid</p>
+          </div>
           <div class="flex flex-col items-start sm:flex-row sm:items-center gap-6">
             <div class="flex items-center gap-6">
               <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">From</h4>
-              <inputTime name="startTime" :default-hours="8" :default-minutes="30" default-am-pm="pm" />
+              <inputTime @time-changed="(e) => runUpdateTime(e)" name="startTime" :default-time="startTime" />
             </div>
             <div class="flex items-center gap-6">
-              <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">To</h4>
-              <inputTime name="endTime" :default-hours="10" :default-minutes="0" default-am-pm="pm" />
+              <h4 class="flex justify-center item-center font-semibold text-gray-900 dark:text-white">to</h4>
+              <inputTime @time-changed="(e) => runUpdateTime(e)" name="endTime" :default-time="endTime" />
             </div>
           </div>
         </div>
@@ -108,7 +111,8 @@
         </div>
         <div class="flex justify-end p-4">
           <button type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+            class="text-white bg-blue-700 disabled:bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            :disabled="!validTime">Submit</button>
         </div>
       </form>
     </div>
@@ -116,9 +120,6 @@
 </template>
 
 <script setup lang="ts">
-import { useTimeStore } from '~/store/timeStore';
-
-const timeStore = useTimeStore()
 
 enum ClassMode {
   Weekly,
@@ -134,6 +135,9 @@ const className = ref("")
 const classMode: Ref<ClassMode> = ref(ClassMode.Weekly)
 let oneTime = false
 const dayOfWeek = ref(-1)
+const validTime = ref(true)
+const startTime = ref(new Date('2023-07-05T08:30:00.000Z'))
+const endTime = ref(new Date('2023-07-05T10:00:00.000Z'))
 const description = ref("")
 
 const { data: classes } = await useFetch('/api/classes')
@@ -157,12 +161,12 @@ async function submitForm() {
     const { data, error } = await useFetch('/api/sessions', {
       method: "post",
       body: {
-        className,
+        className: className.value,
         oneTime,
-        dayOfWeek,
-        startTime: timeStore.times["startTime"],
-        endTime: timeStore.times["endTime"],
-        description,
+        dayOfWeek: dayOfWeek.value,
+        startTime: startTime.value,
+        endTime: endTime.value,
+        description: description.value,
       }
     })
 
@@ -189,4 +193,9 @@ async function submitForm() {
     }
   }
 }
+
+function runUpdateTime(event: { name: string, time: Date }) {
+  updateTime({ event, startTime, endTime, validTime })
+}
+
 </script>

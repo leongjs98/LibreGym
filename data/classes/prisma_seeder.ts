@@ -61,6 +61,7 @@ const classNameId: { [name: string]: string } = {}
 async function main() {
   console.log("---------------------------------Deleting existing sessions and classes---------------------------------")
   // console.log(sessionData[0].oneTime, typeof(sessionData[0].oneTime))
+  await prisma.attendance.deleteMany()
   await prisma.session.deleteMany()
   await prisma.class.deleteMany()
 
