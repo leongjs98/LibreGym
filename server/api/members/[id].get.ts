@@ -2,10 +2,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
-  const id = event.context.params.id
+  const id = event.context.params?.id
   
   try {
-    const member = await prisma.member.findUnique({
+    const member = await prisma.member.findUniqueOrThrow({
       where: { id: id }
     })
     return member

@@ -32,19 +32,32 @@ export default defineEventHandler(async (event) => {
       const endTime = new Date(sessionToCreate['endTime'])
       const description = sessionToCreate['description']
 
-      const newSession = await prisma.session.create({
-        data: {
-          classId,
-          oneTime,
-          dayOfWeek,
-          startTime,
-          endTime,
-          description
-        }
-      })
+      const validTime = endTime.getTime() - startTime.getTime() > 0
 
-      console.log("created new session\n", newSession)
-      return newSession
+      if (validTime) {
+        const newSession = await prisma.session.upsert({
+          where: {
+            classId_dayOfWeek_startTime: {
+              classId, dayOfWeek, startTime
+            }
+          },
+          update: {},
+          create: {
+            classId,
+            oneTime,
+            dayOfWeek,
+            startTime,
+            endTime,
+            description
+          }
+        })
+
+        console.log("created new session\n", newSession)
+        return newSession
+      }
+
+      console.log('Invalid time. No session was created.')
+      return 'Invalid time. No session was created.'
     }
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {

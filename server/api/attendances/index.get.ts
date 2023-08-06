@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
       const attendeeId = query["attendeeId"].toString()
       const sessionId = query["sessionId"].toString()
       const sessionDate = new Date(query["sessionDate"].toString())
-      const singleAttendance = await prisma.attendance.findUnique({
+      const singleAttendance = await prisma.attendance.findUniqueOrThrow({
         where: {
           attendeeId_sessionId_sessionDate: {
             attendeeId,

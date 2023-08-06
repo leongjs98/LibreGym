@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
 
   try {
-    const findClass = await prisma.class.findUnique({
+    const findClass = await prisma.class.findUniqueOrThrow({
       where: { id }
     })
 

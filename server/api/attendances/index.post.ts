@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   const sessionDate: string = attendance["sessionDate"]
 
   try {
-    const attendee = await prisma.member.findUnique({ where: { id: attendeeId } })
-    const sessAttended = await prisma.session.findUnique({ where: { id: sessionId } })
+    const attendee = await prisma.member.findUniqueOrThrow({ where: { id: attendeeId } })
+    const sessAttended = await prisma.session.findUniqueOrThrow({ where: { id: sessionId } })
 
     if(attendee && sessAttended) {
       console.log(typeof(sessionDate), sessionDate)
