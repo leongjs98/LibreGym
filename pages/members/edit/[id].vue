@@ -69,8 +69,7 @@
           <p class="text-gray-600">
             Birth Date (YYYY/MM/DD)
           </p>
-          <inputDate name="birthday" :defaultYear="birthdayYear" :defaultMonth="birthdayMonth"
-            :defaultDay="birthdayDay" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="birthday" :default-date="birthday" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
@@ -113,15 +112,13 @@
           <p class="text-gray-600">
             Joined Date (YYYY/MM/DD)
           </p>
-          <inputDate name="joinedDate" :defaultYear="joinedDateYear" :defaultMonth="joinedDateMonth"
-            :defaultDay="joinedDateDay" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="joinedDate" :default-date="joinedDate" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
             Contract End Date (YYYY/MM/DD)
           </p>
-          <inputDate name="contractEndDate" :defaultYear="contractEndDateYear" :defaultMonth="contractEndDateMonth"
-            :defaultDay="contractEndDateDay" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="contractEndDate" :default-date="contractEndDate" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
@@ -211,25 +208,32 @@ const homeAddress = ref(getMember.value?.homeAddress)
 const notes = ref(getMember.value?.notes)
 const medicalIssues = ref(getMember.value?.medicalIssues)
 
-const fillBirthday = new Date(getMember.value?.birthday)
-const birthdayYear = fillBirthday.getFullYear()
-const birthdayMonth = fillBirthday.getMonth() + 1
-const birthdayDay = fillBirthday.getDate()
+const birthday = ref(new Date(getMember.value?.birthday))
+const joinedDate = ref(new Date(getMember.value?.joinedDate))
+const contractEndDate = ref(new Date(getMember.value?.contractEndDate))
 
-const fillJoinedDate = new Date(getMember.value?.joinedDate)
-const joinedDateYear = fillJoinedDate.getFullYear()
-const joinedDateMonth = fillJoinedDate.getMonth() + 1
-const joinedDateDay = fillJoinedDate.getDate()
+console.log(birthday.value)
+console.log(joinedDate.value)
+console.log(contractEndDate.value)
+// const fillBirthday = new Date(getMember.value?.birthday)
+// const birthdayYear = fillBirthday.getFullYear()
+// const birthdayMonth = fillBirthday.getMonth() + 1
+// const birthdayDay = fillBirthday.getDate()
+//
+// const fillJoinedDate = new Date(getMember.value?.joinedDate)
+// const joinedDateYear = fillJoinedDate.getFullYear()
+// const joinedDateMonth = fillJoinedDate.getMonth() + 1
+// const joinedDateDay = fillJoinedDate.getDate()
+//
+// const fillContractEndDate = new Date(getMember.value?.contractEndDate)
+// const contractEndDateYear = fillContractEndDate.getFullYear()
+// const contractEndDateMonth = fillContractEndDate.getMonth() + 1
+// const contractEndDateDay = fillContractEndDate.getDate()
 
-const fillContractEndDate = new Date(getMember.value?.contractEndDate)
-const contractEndDateYear = fillContractEndDate.getFullYear()
-const contractEndDateMonth = fillContractEndDate.getMonth() + 1
-const contractEndDateDay = fillContractEndDate.getDate()
-
-const { dates } = storeToRefs(dateStore)
-const birthday = dates.value["birthday"]
-const joinedDate = dates.value["joinedDate"]
-const contractEndDate = dates.value["contractEndDate"]
+// const { dates } = storeToRefs(dateStore)
+// const birthday = dates.value["birthday"]
+// const joinedDate = dates.value["joinedDate"]
+// const contractEndDate = dates.value["contractEndDate"]
 
 async function submitForm() {
   const { data: updateMember, error: updateError } = await useFetch(`/api/members/${id}`, {
@@ -271,6 +275,18 @@ async function submitForm() {
       toastTitle,
       toastMsg,
     })
+  }
+}
+
+function updateDate(e: { name: string, date: Date }) {
+  if (e.name.toLowerCase() == "birthday") {
+    birthday.value = e.date
+  }
+  else if (e.name.toLowerCase() == "joineddate") {
+    joinedDate.value = e.date
+  }
+  else if (e.name.toLowerCase() == "contractenddate") {
+    contractEndDate.value = e.date
   }
 }
 </script>

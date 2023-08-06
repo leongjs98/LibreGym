@@ -15,7 +15,7 @@
       <form @submit.prevent="submitForm">
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Full name
+            Full name*
           </p>
           <input v-model="fullName" type="text"
             class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
@@ -23,7 +23,7 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Sex
+            Sex*
           </p>
           <ul
             class="items-center w-fit text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -57,7 +57,7 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Phone Number
+            Phone Number*
           </p>
           <p>
             <input v-model="phoneNumber" type="text"
@@ -67,13 +67,13 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Birth Date (YYYY/MM/DD)
+            Birth Date (YYYY/MM/DD)*
           </p>
-          <inputDate name="birthday" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="birthday" :default-date="birthday" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Status
+            Belt*
           </p>
           <select v-model="belt" name="belt"
             class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
@@ -86,7 +86,7 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Stripe
+            Stripe*
           </p>
           <select v-model="stripe" name="stripe"
             class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
@@ -99,7 +99,7 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Status
+            Status*
           </p>
           <select v-model="status" name="status"
             class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
@@ -110,15 +110,15 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Joined Date (YYYY/MM/DD)
+            Joined Date (YYYY/MM/DD)*
           </p>
-          <inputDate name="joinedDate" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="joinedDate" :default-date="joinedDate" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
             Contract End Date (YYYY/MM/DD)
           </p>
-          <inputDate name="contractEndDate" />
+          <inputDate @date-changed="(e) => updateDate(e)" name="contractEndDate" :default-date="contractEndDate" />
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
@@ -129,7 +129,7 @@
         </div>
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <p class="text-gray-600">
-            Home Address
+            Home Address*
           </p>
           <textarea v-model="homeAddress" name="homeAddress" id="" cols="30" rows="3"
             class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
@@ -141,26 +141,6 @@
           <textarea v-model="notes" name="notes" id="" cols="30" rows="3"
             class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
         </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
-          <p class="text-gray-600">
-            Signed Waiver
-          </p>
-          <div class="space-y-2">
-            <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
-              <div class="space-x-2 truncate">
-                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current inline text-gray-500" width="24" height="24"
-                  viewBox="0 0 24 24">
-                  <path
-                    d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z" />
-                </svg>
-                <span>
-                  signed_waiver_jane_doe.pdf
-                </span>
-              </div>
-              <a href="#" class="text-purple-700 hover:underline">Download</a>
-            </div>
-          </div>
-        </div>
         <div class="flex justify-end p-4">
           <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
@@ -171,11 +151,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDateStore } from "@/store/dateStore"
-import { storeToRefs } from "pinia";
-
-const dateStore = useDateStore()
-
 const fullName = ref('')
 const email = ref('')
 const sex = ref('')
@@ -187,10 +162,10 @@ const homeAddress = ref('')
 const notes = ref('')
 const medicalIssues = ref('')
 
-const { dates } = storeToRefs(dateStore)
-const birthday = dates.value["birthday"]
-const joinedDate = dates.value["joinedDate"]
-const contractEndDate = dates.value["contractEndDate"]
+const currentDateStr = new Date().toISOString()
+const birthday = ref(new Date(currentDateStr))
+const joinedDate = ref(new Date(currentDateStr))
+const contractEndDate = ref(new Date(currentDateStr))
 
 const showToast = ref(false)
 const toastType = ref('info')
@@ -198,6 +173,7 @@ const toastTitle = ref('default title')
 const toastMsg = ref('default message')
 
 async function submitForm() {
+  // if (!fullName || !sex || !belt || !stripe || !phoneNumber || !status || !homeAddress)
   const { data, error } = await useFetch('/api/members', {
     method: "post",
     body: {
@@ -206,9 +182,9 @@ async function submitForm() {
       sex: sex.value,
       belt: belt.value,
       stripe: parseInt(stripe.value),
-      birthday,
-      joinedDate,
-      contractEndDate,
+      birthday: birthday.value,
+      joinedDate: joinedDate.value,
+      contractEndDate: contractEndDate.value,
       phoneNumber: phoneNumber.value,
       status: status.value,
       homeAddress: homeAddress.value,
@@ -237,6 +213,18 @@ async function submitForm() {
       toastTitle,
       toastMsg,
     })
+  }
+}
+
+function updateDate(e: { name: string, date: Date }) {
+  if (e.name.toLowerCase() == "birthday") {
+    birthday.value = e.date
+  }
+  else if (e.name.toLowerCase() == "joineddate") {
+    joinedDate.value = e.date
+  }
+  else if (e.name.toLowerCase() == "contractenddate") {
+    contractEndDate.value = e.date
   }
 }
 

@@ -30,20 +30,11 @@ const props = defineProps({
 
 const color = ref('yellow')
 
-switch (props.type) {
-  case 'success':
-    color.value = 'green'
-    break;
-  case 'error':
-    color.value = 'red'
-    break;
-  case 'info':
-    color.value = 'blue'
-    break;
-  // case 'warning':
-  //   color.value = 'yellow'
-  //   break;
-  default:
-    break;
-}
+if (props.type == 'success')
+  color.value = 'green'
+else if (props.type == 'error')
+  color.value = 'red'
+else if (props.type == 'info')
+  color.value = 'blue'
+
 </script>
