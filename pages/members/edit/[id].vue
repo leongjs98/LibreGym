@@ -4,6 +4,7 @@
       <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
     </transition>
     <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
+      <MemberLinks/>
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
           Member Information
@@ -13,154 +14,47 @@
         </p>
       </div>
       <form @submit.prevent="submitForm">
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Full name
-          </p>
-          <input v-model="fullName" type="text"
-            class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
-            placeholder="Full name" />
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Sex
-          </p>
-          <ul
-            class="items-center w-fit text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            <li class="w-28 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-              <div class="flex items-center pl-3">
-                <input v-model="sex" :value="'female'" id="female" type="radio" name="list-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                <label for="female"
-                  class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
-              </div>
-            </li>
-            <li class="w-28 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-              <div class="flex items-center pl-3">
-                <input v-model="sex" :value="'male'" id="male" type="radio" name="list-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                <label for="male"
-                  class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Male</label>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Email Address
-          </p>
-          <p>
-            <input v-model="email" type="email"
-              class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
-              placeholder="Email address" />
-          </p>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Phone Number
-          </p>
-          <p>
-            <input v-model="phoneNumber" type="text"
-              class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
-              placeholder="Contact number" />
-          </p>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Birth Date (YYYY/MM/DD)
-          </p>
-          <inputDate @date-changed="(e) => updateDate(e)" name="birthday" :default-date="birthday" />
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Status
-          </p>
-          <select v-model="belt" name="belt"
-            class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-            <option :value="'white'">White</option>
-            <option :value="'blue'">Blue</option>
-            <option :value="'purple'">Purple</option>
-            <option :value="'brown'">Brown</option>
-            <option :value="'black'">Black</option>
-          </select>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Status
-          </p>
-          <select v-model="stripe" name="stripe"
-            class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-            <option :value="0">0</option>
-            <option :value="1">1</option>
-            <option :value="2">2</option>
-            <option :value="3">3</option>
-            <option :value="4">4</option>
-          </select>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Status
-          </p>
-          <select v-model="status" name="status"
-            class="w-28 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-            <option :value="'trial'">Trial</option>
-            <option :value="'enquiry'">Enquiry</option>
-            <option :value="'member'">Member</option>
-          </select>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Joined Date (YYYY/MM/DD)
-          </p>
-          <inputDate @date-changed="(e) => updateDate(e)" name="joinedDate" :default-date="joinedDate" />
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Contract End Date (YYYY/MM/DD)
-          </p>
-          <inputDate @date-changed="(e) => updateDate(e)" name="contractEndDate" :default-date="contractEndDate" />
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Medical Issues
-          </p>
-          <textarea v-model="medicalIssues" name="medicalIssues" cols="30" rows="3"
-            class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Home Address
-          </p>
-          <textarea v-model="homeAddress" name="homeAddress" id="" cols="30" rows="3"
-            class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Notes
-          </p>
-          <textarea v-model="notes" name="notes" id="" cols="30" rows="3"
-            class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
-          <p class="text-gray-600">
-            Signed Waiver
-          </p>
-          <div class="space-y-2">
-            <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
-              <div class="space-x-2 truncate">
-                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current inline text-gray-500" width="24" height="24"
-                  viewBox="0 0 24 24">
-                  <path
-                    d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z" />
-                </svg>
-                <span>
-                  signed_waiver_jane_doe.pdf
-                </span>
-              </div>
-              <a href="#" class="text-purple-700 hover:underline">Download</a>
-            </div>
-          </div>
-        </div>
+        <inputText v-model="fullName" name="fullname" label="Full name*" />
+        <inputRadio v-model="sex" name="fullname" label="Sex*" :options="['female', 'male']"/>
+        <inputText v-model="email" name="email" label="Email address" />
+        <inputText v-model="phoneNumber" name="phoneNumber" type="tel" label="Phone Number*" />
+        <inputDate label="Birth Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="birthday"
+          :default-date="birthday" />
+        <InputDropdown v-model="belt" label="Belt*" name="belt"
+          :options="[{ name: 'White', value: 'white' }, { name: 'Blue', value: 'blue' }, { name: 'Purple', value: 'purple' }, { name: 'Brown', value: 'brown' }, { name: 'Black', value: 'black' }]" />
+        <InputDropdown v-model="stripe" label="Stripe*" name="stripe"
+          :options="[{ name: '0', value: 0 }, { name: '1', value: 1 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 4 }]" />
+        <InputDropdown v-model="status" label="Status*" name="status"
+          :options="[{ name: 'Trial', value: 'trial' }, { name: 'Enquiry', value: 'enquiry' }, { name: 'Member', value: 'member' }]" />
+        <inputDate label="Joined Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="joinedDate"
+          :default-date="joinedDate" />
+        <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)"
+          name="contractEndDate" :default-date="contractEndDate" />
+        <InputTextarea v-model="homeAddress" name="homeAddress" label="Home Address*" />
+        <InputTextarea v-model="medicalIssues" name="medicalIssues" label="Medical Issues" />
+        <InputTextarea v-model="notes" name="notes" label="Notes" />
+
+        <!-- <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4"> -->
+        <!--   <p class="text-gray-600"> -->
+        <!--     Signed Waiver -->
+        <!--   </p> -->
+        <!--   <div class="space-y-2"> -->
+        <!--     <div class="border-2 flex items-center p-2 rounded justify-between space-x-2"> -->
+        <!--       <div class="space-x-2 truncate"> -->
+        <!--         <svg xmlns="http://www.w3.org/2000/svg" class="fill-current inline text-gray-500" width="24" height="24" -->
+        <!--           viewBox="0 0 24 24"> -->
+        <!--           <path -->
+        <!--             d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z" /> -->
+        <!--         </svg> -->
+        <!--         <span> -->
+        <!--           signed_waiver_jane_doe.pdf -->
+        <!--         </span> -->
+        <!--       </div> -->
+        <!--       <a href="#" class="text-purple-700 hover:underline">Download</a> -->
+        <!--     </div> -->
+        <!--   </div> -->
+        <!-- </div> -->
+
         <div class="flex justify-end p-4">
           <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
@@ -171,14 +65,25 @@
 </template>
 
 <script setup lang="ts">
-import { useDateStore } from "@/store/dateStore"
-import { storeToRefs } from "pinia";
-
-const dateStore = useDateStore()
+interface APIBody {
+  fullName: string;
+  email: string;
+  sex: string;
+  belt: string;
+  stripe: string;
+  phoneNumber: string;
+  status: string;
+  homeAddress: string;
+  notes: string;
+  medicalIssues: string;
+  birthday: string;
+  joinedDate: string;
+  contractEndDate: string;
+}
 
 const id = useRoute().params.id
 
-const { data: getMember, error: getError } = await useFetch(`/api/members/${id}`)
+const { data: getMember, error: getError } = await useFetch<APIBody>(`/api/members/${id}`)
 
 const showToast = ref(false)
 const toastType = ref('info')
@@ -212,69 +117,61 @@ const birthday = ref(new Date(getMember.value?.birthday))
 const joinedDate = ref(new Date(getMember.value?.joinedDate))
 const contractEndDate = ref(new Date(getMember.value?.contractEndDate))
 
-console.log(birthday.value)
-console.log(joinedDate.value)
-console.log(contractEndDate.value)
-// const fillBirthday = new Date(getMember.value?.birthday)
-// const birthdayYear = fillBirthday.getFullYear()
-// const birthdayMonth = fillBirthday.getMonth() + 1
-// const birthdayDay = fillBirthday.getDate()
-//
-// const fillJoinedDate = new Date(getMember.value?.joinedDate)
-// const joinedDateYear = fillJoinedDate.getFullYear()
-// const joinedDateMonth = fillJoinedDate.getMonth() + 1
-// const joinedDateDay = fillJoinedDate.getDate()
-//
-// const fillContractEndDate = new Date(getMember.value?.contractEndDate)
-// const contractEndDateYear = fillContractEndDate.getFullYear()
-// const contractEndDateMonth = fillContractEndDate.getMonth() + 1
-// const contractEndDateDay = fillContractEndDate.getDate()
-
-// const { dates } = storeToRefs(dateStore)
-// const birthday = dates.value["birthday"]
-// const joinedDate = dates.value["joinedDate"]
-// const contractEndDate = dates.value["contractEndDate"]
-
 async function submitForm() {
-  const { data: updateMember, error: updateError } = await useFetch(`/api/members/${id}`, {
-    method: "put",
-    body: {
-      fullName: fullName.value,
-      email: email.value,
-      sex: sex.value,
-      belt: belt.value,
-      stripe: parseInt(stripe.value),
-      birthday,
-      joinedDate,
-      contractEndDate,
-      phoneNumber: phoneNumber.value,
-      status: status.value,
-      homeAddress: homeAddress.value,
-      notes: notes.value,
-      medicalIssues: medicalIssues.value,
-    }
-  })
 
-  if (updateMember.value) {
-    triggerToast({
-      type: 'success',
-      title: 'Updated member',
-      msg: `${updateMember.value?.fullName} has been updated.`,
-      showToast,
-      toastType,
-      toastTitle,
-      toastMsg,
-    })
-  } else if (updateError.value) {
+  const emptyField = isStrEmptyOrWhitespace(fullName.value) || isStrEmptyOrWhitespace(sex.value) || isStrEmptyOrWhitespace(phoneNumber.value) || !birthday.value || isStrEmptyOrWhitespace(belt.value) || isStrEmptyOrWhitespace(stripe.value) || isStrEmptyOrWhitespace(status.value) || !joinedDate.value || isStrEmptyOrWhitespace(homeAddress.value)
+
+  if (emptyField) {
     triggerToast({
       type: 'error',
-      title: updateError.value?.name,
-      msg: updateError.value?.message,
+      title: 'Empty required field(s)',
+      msg: 'Please fill in the required fields (marked with *)',
       showToast,
       toastType,
       toastTitle,
       toastMsg,
     })
+  } else {
+    const { data: updateMember, error: updateError } = await useFetch(`/api/members/${id}`, {
+      method: "put",
+      body: {
+        fullName: fullName.value,
+        email: email.value,
+        sex: sex.value,
+        belt: belt.value,
+        stripe: stripe.value,
+        birthday,
+        joinedDate,
+        contractEndDate,
+        phoneNumber: phoneNumber.value,
+        status: status.value,
+        homeAddress: homeAddress.value,
+        notes: notes.value,
+        medicalIssues: medicalIssues.value,
+      }
+    })
+
+    if (updateMember.value) {
+      triggerToast({
+        type: 'success',
+        title: 'Updated member',
+        msg: `${updateMember.value?.fullName} has been updated.`,
+        showToast,
+        toastType,
+        toastTitle,
+        toastMsg,
+      })
+    } else if (updateError.value) {
+      triggerToast({
+        type: 'error',
+        title: updateError.value?.name,
+        msg: updateError.value?.message,
+        showToast,
+        toastType,
+        toastTitle,
+        toastMsg,
+      })
+    }
   }
 }
 

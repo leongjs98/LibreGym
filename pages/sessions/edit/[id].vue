@@ -1,13 +1,9 @@
 <template>
-  <div class="py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+  <div class="max-w-md sm:max-w-5xl md:max-w-6xl py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
     <transition name="toast">
       <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
     </transition>
-    <div class="max-w-4xl w-full space-x-4 flex justify-end">
-      <NuxtLink to="/classes/" class="flex items-center w-fit px-4 py-2 mb-6 border-2 border-gray-500 rounded">
-        View classes
-      </NuxtLink>
-    </div>
+    <ClassLinks />
     <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
@@ -15,67 +11,12 @@
         </h2>
       </div>
       <form @submit.prevent="submitForm">
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Class name*
-          </p>
-          <div class="space-y-2">
-            <select v-model="className"
-              class="flex-1 p-2 appearance-none border border-gray-300 w-full h-10 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-              <option selected disabled value="">Select class</option>
-              <option v-for="c in getClasses" :key="c.id">
-                {{ c.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Class mode*
-          </p>
-          <div class="flex gap-5 items-start">
-            <ul
-              class="flex items-center w-fit text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-              <li class="w-28 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                <div class="flex items-center pl-3">
-                  <input v-model="classMode" :value="ClassMode.Weekly" id="weekly-class" type="radio" name="list-radio"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    required>
-                  <label for="weekly-class"
-                    class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Weekly</label>
-                </div>
-              </li>
-              <!-- <li class="w-28 border-b border-gray-200 dark:border-gray-600"> -->
-              <!--   <div class="flex items-center pl-3"> -->
-              <!--     <input :value="ClassMode.OneTime" disabled id="one-time-class" type="radio" v-model="classMode" -->
-              <!--       name="list-radio" -->
-              <!--       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" -->
-              <!--       required> -->
-              <!--     <label for="one-time-class" -->
-              <!--       class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">One-time</label> -->
-              <!--   </div> -->
-              <!-- </li> -->
-            </ul>
-          </div>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Day of Week*
-          </p>
-          <div class="space-y-2">
-            <select v-model="dayOfWeek"
-              class="flex-1 p-2 appearance-none border border-gray-300 w-full h-10 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-              <option selected disabled value="-1">Select day of week</option>
-              <option value="0">Sunday</option>
-              <option value="1">Monday</option>
-              <option value="2">Tuesday</option>
-              <option value="3">Wednesday</option>
-              <option value="4">Thursday</option>
-              <option value="5">Friday</option>
-              <option value="6">Saturday</option>
-            </select>
-          </div>
-        </div>
+        <InputDropdown v-model="className" label="Class name*" name="className"
+          :options="getClasses.map(({ name }) => ({ name, value: name }))" />
+        <InputRadio v-model="classMode" label="Class mode*" name="classMode" :options="['weekly']" />
+        <InputDropdown v-model="dayOfWeek" label="Day of Week*" name="dayOfWeek" :options="[
+          { name: 'Sunday', value: 0 }, { name: 'Monday', value: 1 }, { name: 'Tuesday', value: 2 }, { name: 'Wednesday', value: 3 }, { name: 'Thursday', value: 4 }, { name: 'Friday', value: 5 }, { name: 'Saturday', value: 6 }
+        ]" />
         <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
           <div class="flex justify-between items items-center">
             <h2 class="text-gray-600">
@@ -94,13 +35,8 @@
             </div>
           </div>
         </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">
-            Description
-          </p>
-          <textarea v-model="description" name="description" id="" cols="30" rows="3"
-            class="w-full flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"></textarea>
-        </div>
+        <InputTextarea v-model="description" label="Description" name="description" />
+
         <div class="flex justify-end p-4">
           <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
@@ -117,10 +53,10 @@ const toastType = ref('info')
 const toastTitle = ref('default title')
 const toastMsg = ref('default message')
 
-enum ClassMode {
-  Weekly,
-  OneTime,
-}
+// enum ClassMode {
+//   Weekly,
+//   OneTime,
+// }
 
 const sessionId = useRoute().params.id
 const { data: getSessions } = await useFetch(`/api/sessions/${sessionId}`)
@@ -128,7 +64,7 @@ const { data: getClasses } = await useFetch(`/api/classes`)
 
 const className = ref(getSessions.value?.name)
 const oneTime = ref(getSessions.value?.oneTime)
-const classMode = ref(getSessions.value?.oneTime ? ClassMode.OneTime : ClassMode.Weekly)
+const classMode = ref(getSessions.value?.oneTime ? 'onetime' : 'weekly')
 const dayOfWeek = ref(getSessions.value?.dayOfWeek)
 const validTime = ref(true)
 const startTime = ref(new Date(getSessions.value?.startTime))
@@ -136,55 +72,68 @@ const endTime = ref(new Date(getSessions.value?.endTime))
 const description = ref(getSessions.value?.description)
 
 async function submitForm() {
-  if ((dayOfWeek.value == 0 || dayOfWeek.value) && className.value) {
-    const validDOW = dayOfWeek.value <= 6 && dayOfWeek.value >= 0
-    const validName = className.value.length !== 0
+  const emptyField = isStrEmptyOrWhitespace(className.value) || !classMode.value || !dayOfWeek.value || dayOfWeek.value <= 0 || !startTime.value || !endTime.value
 
-    if (validDOW && validName) {
+  if (emptyField) {
+    triggerToast({
+      type: 'error',
+      title: 'Empty required field(s)',
+      msg: 'Please fill in the required fields (marked with *)',
+      showToast,
+      toastType,
+      toastTitle,
+      toastMsg,
+    })
+  } else {
+    if ((dayOfWeek.value == 0 || dayOfWeek.value) && className.value) {
+      const validDOW = dayOfWeek.value <= 6 && dayOfWeek.value >= 0
+      const validName = className.value.length !== 0
 
-      if (classMode.value == ClassMode.Weekly) {
-        oneTime.value = false
-      } else if (classMode.value == ClassMode.OneTime) {
-        oneTime.value = true
-      }
+      if (validDOW && validName) {
 
-      if (typeof (dayOfWeek.value) == "string") {
-        dayOfWeek.value = parseInt(dayOfWeek.value)
-      }
-
-      const { data, error } = await useFetch(`/api/sessions/${sessionId}`, {
-        method: "put",
-        body: {
-          oneTime,
-          dayOfWeek: dayOfWeek.value,
-          startTime: startTime.value,
-          endTime: endTime.value,
-          description: description.value,
+        if (classMode.value.toLowerCase() == 'weekly') {
+          oneTime.value = false
+        } else if (classMode.value.toLowerCase() == 'onetime') {
+          oneTime.value = true
         }
-      })
 
-      if (data.value) {
-        triggerToast({
-          type: 'success',
-          title: 'Updated session',
-          msg: `This session of ${className.value} has been updated.`,
-          showToast,
-          toastType,
-          toastTitle,
-          toastMsg,
+        if (typeof (dayOfWeek.value) == "string") {
+          dayOfWeek.value = parseInt(dayOfWeek.value)
+        }
+
+        const { data, error } = await useFetch(`/api/sessions/${sessionId}`, {
+          method: "put",
+          body: {
+            oneTime,
+            dayOfWeek: dayOfWeek.value,
+            startTime: startTime.value,
+            endTime: endTime.value,
+            description: description.value,
+          }
         })
-      } else if (error.value) {
-        triggerToast({
-          type: 'error',
-          title: error.value?.name,
-          msg: error.value?.message,
-          showToast,
-          toastType,
-          toastTitle,
-          toastMsg,
-        })
+
+        if (data.value) {
+          triggerToast({
+            type: 'success',
+            title: 'Updated session',
+            msg: `This session of ${className.value} has been updated.`,
+            showToast,
+            toastType,
+            toastTitle,
+            toastMsg,
+          })
+        } else if (error.value) {
+          triggerToast({
+            type: 'error',
+            title: error.value?.name,
+            msg: error.value?.message,
+            showToast,
+            toastType,
+            toastTitle,
+            toastMsg,
+          })
+        }
       }
-
     }
   }
 }

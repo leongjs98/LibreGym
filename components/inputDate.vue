@@ -1,31 +1,36 @@
 <template>
-  <div class="flex items-center gap-4">
-    <div class="flex w-20 justify-center items-center">
-      <select v-model="year" name="year"
-        class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-        <option v-for="y, i in 100" :key="i" :v-model="currentYear + 5 - i">
-          {{ currentYear + 5 - i }}
-        </option>
-      </select>
-    </div>
-    <div class="w-14">
-      <select v-model="month" name="month"
-        class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-        <option v-for="m in 12" :key="m" :value="m">
-          {{ m }}
-        </option>
-      </select>
-    </div>
-    <div class="w-14">
-      <select v-model="day" name="day"
-        class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-        <option v-for="d in totalDayOfMonth" :key="d" :value="d">
-          {{ d }}
-        </option>
-      </select>
-    </div>
-    <div class="w-20">
-      <p>({{ weekday }})</p>
+  <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+    <p class="text-gray-600">
+      {{ label }} (YYYY/MM/DD){{ isRequired ? '*' : '' }}
+    </p>
+    <div class="flex items-center gap-4">
+      <div class="flex w-20 justify-center items-center">
+        <select v-model="year" name="year"
+          class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+          <option v-for="y, i in 100" :key="i" :v-model="currentYear + 5 - i">
+            {{ currentYear + 5 - i }}
+          </option>
+        </select>
+      </div>
+      <div class="w-14">
+        <select v-model="month" name="month"
+          class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+          <option v-for="m in 12" :key="m" :value="m">
+            {{ m }}
+          </option>
+        </select>
+      </div>
+      <div class="w-14">
+        <select v-model="day" name="day"
+          class="flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+          <option v-for="d in totalDayOfMonth" :key="d" :value="d">
+            {{ d }}
+          </option>
+        </select>
+      </div>
+      <div class="w-20">
+        <p>({{ weekday }})</p>
+      </div>
     </div>
   </div>
 </template>
@@ -42,8 +47,10 @@ export default {}
 const emit = defineEmits(['dateChanged'])
 
 const props = defineProps({
+  label: { type: String, required: true },
   name: { type: String, required: true },
   defaultDate: { type: Date, required: true },
+  isRequired: { type: Boolean, required: true }
 })
 
 // TODO: account for contract end date where year is in the future
