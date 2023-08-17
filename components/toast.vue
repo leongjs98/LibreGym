@@ -1,16 +1,16 @@
 <template>
-  <div class="absolute h-screen top-24 right-8" role="alert">
-    <div class="sticky top-8 right-8 z-50 cursor-pointer p-4 max-w-4xl flex rounded-lg border"
+  <div class="absolute h-screen top-24 left-8" role="alert">
+    <div class="sticky top-8 left-8 z-50 cursor-pointer p-4 max-w-4xl flex rounded-lg border"
       :class="`'border-${color}-300 bg-${color}-100`">
       <span class="flex-shrink-0" :class="`text-${color}-500`">
-        <icon v-if="props.type == 'success'" name="material-symbols:check-circle" />
-        <icon v-if="props.type == 'error'" name="akar-icons:circle-x-fill" />
-        <icon v-if="props.type == 'info'" name="mdi:information-variant-circle" />
-        <icon v-if="props.type == 'warning'" name="bi:exclamation-circle-fill" />
+        <icon v-if="type == 'success'" name="material-symbols:check-circle" />
+        <icon v-if="type == 'error'" name="akar-icons:circle-x-fill" />
+        <icon v-if="type == 'info'" name="mdi:information-variant-circle" />
+        <icon v-if="type == 'warning'" name="bi:exclamation-circle-fill" />
       </span>
       <div class="ml-3 flex flex-col items-start space-y-2 text-sm">
-        <h3 class="font-semibold" :class="`text-${color}-800`">{{ props.title }}</h3>
-        <p class="font-medium antialiased" :class="`text-${color}-600`">{{ props.message }}</p>
+        <h3 class="font-semibold" :class="`text-${color}-800`">{{ title }}</h3>
+        <p class="font-medium antialiased" :class="`text-${color}-600`">{{ message }}</p>
       </div>
     </div>
   </div>
@@ -38,3 +38,19 @@ else if (props.type == 'info')
   color.value = 'blue'
 
 </script>
+
+<style scoped>
+.toast-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.toast-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+</style>
