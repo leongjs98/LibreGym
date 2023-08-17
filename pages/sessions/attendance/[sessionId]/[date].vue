@@ -38,7 +38,7 @@
                       clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <input type="text" id="attendees-search"
+                <input v-model="searchQueryAttend" type="text" id="attendees-search"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search">
               </div>
@@ -60,7 +60,7 @@
               </div>
             </div>
             <ul class="max-h-96 overflow-auto">
-              <li v-for="(attendee, i) in getAttendees"
+              <li v-for="(attendee, i) in filteredAttendees"
                 class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md">
                 <div class="w-full flex justify-between items-end">
                   <div>
@@ -105,14 +105,14 @@
                     clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <input type="text" id="non-attendees-search"
+              <input v-model="searchQueryNonAttend" type="text" id="non-attendees-search"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search">
             </div>
           </div>
         </div>
         <ul class="max-h-96 w-full overflow-auto divide-y-2">
-          <li v-for="nonAttendees, i in getNonAttendees"
+          <li v-for="nonAttendees, i in filteredNonAttendees"
             class="flex gap-3 items-center font-semibold text-gray-800 px-4 sm:px-6 py-5 rounded-md">
             <div class="w-full flex justify-between">
               <div>
@@ -141,6 +141,8 @@
 const sessionId = useRoute().params.sessionId
 const sessionDate = useRoute().params.date
 
+const searchQueryAttend = ref('')
+const searchQueryNonAttend = ref('')
 const showToast = ref(false)
 const toastType = ref('info')
 const toastTitle = ref('default title')
@@ -166,6 +168,24 @@ const { data: getAttendees, error: getAttendeesError, refresh: getAttendeesRefre
   query: { sessionId, sessionDate }
 })
 
+const filteredAttendees = computed(() => {
+  const returnAttendees = []
+  if (getAttendees.value) {
+    for (let i = 0; i < getAttendees.value.length; i++) {
+      const matchedFullName = (getAttendees.value[i].fullName.toLowerCase()).includes(searchQueryAttend.value.toLowerCase())
+      const matchedBirthday = (getAttendees.value[i].birthday.toLowerCase()).includes(searchQueryAttend.value.toLowerCase())
+      const matchedSex = getAttendees.value[i].sex.toLowerCase() == (searchQueryAttend.value.toLowerCase())
+      const matchedBelt = (getAttendees.value[i].belt.toLowerCase()).includes(searchQueryAttend.value.toLowerCase())
+      const matchedStatus = (getAttendees.value[i].status.toLowerCase()).includes(searchQueryAttend.value.toLowerCase())
+      if (matchedFullName || matchedBirthday || matchedSex || matchedBelt || matchedStatus) {
+        returnAttendees.push(getAttendees.value[i])
+      }
+    }
+    return returnAttendees
+  }
+  return []
+})
+
 if (getAttendeesError.value) {
   triggerToast({
     type: 'error',
@@ -180,6 +200,24 @@ if (getAttendeesError.value) {
 
 const { data: getNonAttendees, error: getNonAttendeesError, refresh: getNonAttendeesRefresh } = await useFetch(`/api/members`, {
   query: { sessionId, sessionDate, exclude: true }
+})
+
+const filteredNonAttendees = computed(() => {
+  const returnNonAttendees = []
+  if (getNonAttendees.value) {
+    for (let i = 0; i < getNonAttendees.value.length; i++) {
+      const matchedFullName = (getNonAttendees.value[i].fullName.toLowerCase()).includes(searchQueryNonAttend.value.toLowerCase())
+      const matchedBirthday = (getNonAttendees.value[i].birthday.toLowerCase()).includes(searchQueryNonAttend.value.toLowerCase())
+      const matchedSex = getNonAttendees.value[i].sex.toLowerCase() == (searchQueryNonAttend.value.toLowerCase())
+      const matchedBelt = (getNonAttendees.value[i].belt.toLowerCase()).includes(searchQueryNonAttend.value.toLowerCase())
+      const matchedStatus = (getNonAttendees.value[i].status.toLowerCase()).includes(searchQueryNonAttend.value.toLowerCase())
+      if (matchedFullName || matchedBirthday || matchedSex || matchedBelt || matchedStatus) {
+        returnNonAttendees.push(getNonAttendees.value[i])
+      }
+    }
+    return returnNonAttendees
+  }
+  return []
 })
 
 if (getNonAttendeesError.value) {
