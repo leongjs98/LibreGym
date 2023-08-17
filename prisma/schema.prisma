@@ -64,7 +64,7 @@ model Session {
   classId    String
   Attendance Attendance[]
 
-  @@unique([classId, dayOfWeek, startTime])
+  @@unique([classId, dayOfWeek, startTime, endTime])
 }
 
 model Attendance {
