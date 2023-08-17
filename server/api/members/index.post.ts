@@ -13,12 +13,22 @@ export default defineEventHandler(async (event) => {
     })
 
     if (existMember) {
-      console.log('member exist\n', existMember)
-      throw 'Member already exist'
+      console.error(`Failed to create member. ${member.fullName} already exist`)
+      throw createError({
+        statusCode: 500,
+        statusMessage: `Failed to create member. ${member.fullName} already exist`
+      })
     } else {
+
+      if (typeof (member['stripe']) === 'string') {
+        member['stripe'] = parseInt(member['stripe'])
+      }
+
       const newMember = await prisma.member.create({
         data: member
       })
+
+      console.log(`${member.fullName} created.`)
       return newMember
     }
 

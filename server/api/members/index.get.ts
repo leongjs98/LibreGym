@@ -75,7 +75,7 @@ export default defineEventHandler(async (event) => {
       return allMembers 
     }
   } catch (e) {
-    return e
+    throw e
   } finally {
     await prisma.$disconnect()
   }

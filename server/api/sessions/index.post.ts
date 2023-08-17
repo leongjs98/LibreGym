@@ -35,14 +35,28 @@ export default defineEventHandler(async (event) => {
       const validTime = endTime.getTime() - startTime.getTime() > 0
 
       if (validTime) {
-        const newSession = await prisma.session.upsert({
+        const existSession = await prisma.session.findFirst({
           where: {
-            classId_dayOfWeek_startTime: {
-              classId, dayOfWeek, startTime
-            }
-          },
-          update: {},
-          create: {
+            AND: [
+              { classId },
+              { oneTime },
+              { dayOfWeek },
+              { startTime },
+              { endTime },
+            ]
+          }
+        })
+
+        console.log('exist session: ', existSession)
+        if (existSession) {
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to create session. It already exists.`
+          })
+        }
+
+        const newSession = await prisma.session.create({
+          data: {
             classId,
             oneTime,
             dayOfWeek,

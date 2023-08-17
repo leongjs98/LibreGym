@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "seedall": "ts-node-esm ./data/classes/prisma_seeder.ts && ts-node-esm ./data/members/prisma_seeder.ts && ts-node-esm ./data/attedances/prisma_seeder.ts"
+    "seed-all": "ts-node-esm ./data/classes/prisma_seeder.ts && ts-node-esm ./data/members/prisma_seeder.ts && ts-node-esm ./data/attedances/prisma_seeder.ts",
+    "delete-all": "ts-node-esm ./data/prisma_delete_data.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

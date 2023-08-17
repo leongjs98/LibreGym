@@ -8,38 +8,40 @@ export default defineEventHandler(async (event) => {
   const sessionDate: string = attendance["sessionDate"]
 
   try {
-    const attendee = await prisma.member.findUniqueOrThrow({ where: { id: attendeeId } })
-    const sessAttended = await prisma.session.findUniqueOrThrow({ where: { id: sessionId } })
+    const attendeeExist = await prisma.member.findUniqueOrThrow({ where: { id: attendeeId } })
+    const sessAttendedExist = await prisma.session.findUniqueOrThrow({ where: { id: sessionId } })
 
-    if(attendee && sessAttended) {
-      console.log(typeof(sessionDate), sessionDate)
+    if(attendeeExist && sessAttendedExist) {
       const sessDateObj = new Date(sessionDate)
-      const validDOW = sessDateObj.getDay() === sessAttended.dayOfWeek
-      // const dayDiff = calculateDateDifference(sessAttended.startDate, sessDateObj)
-      // const dateMatchesIntervalDays = dayDiff % sessAttended?.intervalDays == 0 // Based on dow
-      // const dateIsAfterClassStartDate = dayDiff >= 0
+      const validDOW = sessDateObj.getDay() === sessAttendedExist.dayOfWeek
 
-      // if (dateMatchesIntervalDays && dateIsAfterClassStartDate) {
       if (validDOW) {
-        const newAttendance = await prisma.attendance.upsert({
+        const attendanceExist = await prisma.attendance.findFirst({
           where: {
-            attendeeId_sessionId_sessionDate: {
-              attendeeId,
-              sessionId,
-              sessionDate: new Date(sessionDate),
-            }
-          },
-          update: {},
-          create: {
+            AND: [
+              { attendeeId },
+              { sessionId },
+              { sessionDate: new Date(sessionDate) },
+            ]
+          }
+        })
+
+        if (attendanceExist) {
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to create attendance. Attendance already exist.`
+          })
+        }
+
+        const newAttendance = await prisma.attendance.create({
+          data: {
             attendeeId,
             sessionId,
             sessionDate: new Date(sessionDate),
           }
-          // For insomnia JSON array
-          // data: attendance[0]
         })
 
-        console.log(`Created attendance for ${attendee?.fullName} at ${sessAttended?.name} (${attendance.sessionDate})`)
+        console.log(`Created attendance for ${attendeeExist?.fullName} at ${sessAttendedExist?.name} (${attendance.sessionDate})`)
         return newAttendance
       }
 

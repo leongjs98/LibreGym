@@ -11,8 +11,22 @@ export default defineEventHandler(async (event) => {
   const classToCreate: classToCreate = await readBody(event)
 
   try {
-    // find or create class
     if (classToCreate["name"]) {
+
+      const existClass = await prisma.class.findFirst({
+        where: {
+          name: classToCreate["name"].toString(),
+        }
+      })
+
+      if (existClass) {
+        console.error(`Failed to create class. ${classToCreate["name"].toString()} already exist`)
+        throw createError({
+          statusCode: 500,
+          statusMessage: `Failed to create class. ${classToCreate["name"].toString()} already exist`
+        })
+      }
+
       const newClass = await prisma.class.upsert({
         where: {
           name: classToCreate["name"].toString(),
@@ -25,12 +39,9 @@ export default defineEventHandler(async (event) => {
         }
       })
 
-      console.log("new class created\n", newClass)
+      console.log("created new class")
       return newClass
     }
-
-    console.log("No new class created")
-    return "No new class created"
 
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
