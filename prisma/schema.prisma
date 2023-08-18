@@ -32,7 +32,7 @@ enum BeltRank {
 enum PaymentState {
   paid
   due
-  noAttendance
+  na
 }
 
 // @db.Date = '1958-02-07' instead '1958-02-07T11:22:49.727Z'
