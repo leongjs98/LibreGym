@@ -10,6 +10,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Sex {
+  female
+  male
+}
+
+enum Status {
+  enquiry
+  trial
+  member
+}
+
+enum BeltRank {
+  white
+  blue
+  purple
+  brown
+  black
+}
+
+enum PaymentState {
+  paid
+  due
+  noAttendance
+}
+
 // @db.Date = '1958-02-07' instead '1958-02-07T11:22:49.727Z'
 model Member {
   // Basic fields
@@ -32,9 +57,23 @@ model Member {
   notes           String?
 
   Attendance Attendance[]
+  Payment    Payment[]
 
   // @@unique([fullName, birthday, phoneNumber])
   @@unique([fullName, birthday])
+}
+
+model Payment {
+  id    String       @id @default(uuid())
+  year  Int
+  month Int
+  date  DateTime?    @db.Date()
+  state PaymentState
+
+  member   Member @relation(fields: [memberId], references: [id])
+  memberId String
+
+  @@unique([memberId, year, month])
 }
 
 model Class {
@@ -77,23 +116,4 @@ model Attendance {
   sessionId  String
 
   @@unique([attendeeId, sessionId, sessionDate])
-}
-
-enum Sex {
-  female
-  male
-}
-
-enum Status {
-  enquiry
-  trial
-  member
-}
-
-enum BeltRank {
-  white
-  blue
-  purple
-  brown
-  black
 }
