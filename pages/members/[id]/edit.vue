@@ -4,7 +4,7 @@
       <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
     </transition>
     <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
-      <MemberLinks/>
+      <MemberLinks />
       <div class="p-4 border-b">
         <h2 class="text-2xl ">
           Member Information
@@ -15,7 +15,7 @@
       </div>
       <form @submit.prevent="submitForm">
         <inputText v-model="fullName" name="fullname" label="Full name*" />
-        <inputRadio v-model="sex" name="fullname" label="Sex*" :options="['female', 'male']"/>
+        <inputRadio v-model="sex" name="fullname" label="Sex*" :options="['female', 'male']" />
         <inputText v-model="email" name="email" label="Email address" />
         <inputText v-model="phoneNumber" name="phoneNumber" type="tel" label="Phone Number*" />
         <inputDate label="Birth Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="birthday"
@@ -28,8 +28,14 @@
           :options="[{ name: 'Trial', value: 'trial' }, { name: 'Enquiry', value: 'enquiry' }, { name: 'Member', value: 'member' }]" />
         <inputDate label="Joined Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="joinedDate"
           :default-date="joinedDate" />
+
+        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+          <p class="text-gray-600">Payment History</p>
+          <PaymentHistory />
+        </div>
         <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)"
           name="contractEndDate" :default-date="contractEndDate" />
+
         <InputTextarea v-model="homeAddress" name="homeAddress" label="Home Address*" />
         <InputTextarea v-model="medicalIssues" name="medicalIssues" label="Medical Issues" />
         <InputTextarea v-model="notes" name="notes" label="Notes" />

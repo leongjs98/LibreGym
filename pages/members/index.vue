@@ -88,13 +88,16 @@
               </td>
               <input type="checkbox" class="hidden peer" :id="'option-' + i" />
               <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
-                <NuxtLink :to="`/members/attendance/${member.id}`" class="flex items-center gap-1">
+                <NuxtLink :to="`/members/${member.id}/attendance`" class="flex items-center gap-1">
                   <IconRoundMoreHoriz size="18px" />
                   Attendance
                 </NuxtLink>
-                <NuxtLink :to="`/members/edit/${member.id}`" class="flex items-center gap-1">
+                <NuxtLink :to="`/members/${member.id}/edit`" class="flex items-center gap-1">
                   <IconEdit size="18px" />
                   Edit
+                </NuxtLink>
+                <NuxtLink :to="`/members/${member.id}/payment`" class="flex items-center gap-1">
+                  Payment
                 </NuxtLink>
                 <label :for="'delete-' + i" class="flex items-center gap-1 cursor-pointer">
                   <IconDeleteForeverSharp size="18px" />
