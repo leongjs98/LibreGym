@@ -3,7 +3,7 @@ import type { SexType } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-const NUMBER_OF_MEMBERS = 20;
+const NUMBER_OF_MEMBERS = 15;
 
 type Status = 'enquiry' | 'trial' | 'member';
 type Belt = 'white' | 'blue' | 'purple' | 'brown' | 'black';
@@ -35,7 +35,8 @@ function createRandomUser(): Member {
   const fullName = `${firstName} ${lastName}`
   const email = faker.internet.email(firstName, lastName);
   const birthday = faker.date.birthdate({ min: 18, max: 60, mode: 'age' })
-  const joinedDate = faker.date.past(10)
+  // const joinedDate = faker.date.past(1) // past X years
+  const joinedDate = faker.date.recent(200) // recent (past X days)
   const contractEndDate = faker.date.future(1)
 
   return {
