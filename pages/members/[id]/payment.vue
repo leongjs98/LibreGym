@@ -12,9 +12,11 @@
         <p class="text-lg">{{ year }}</p>
         <button type="button" @click="year++" class="border px-2 py-1.5 border-black">Next</button>
       </div>
-      <p class="text-gray-500">double click the checkboxes to switch state</p>
+      <p class="text-gray-500">double click/tap the checkboxes to switch state</p>
       <p class="text-black">{{ member.fullName }} joined on {{ formatDate(member.joinedDate) }}</p>
-      <InputCalendar />
+      <div class="flex flex-wrap gap-3">
+        <AttendanceCalendar v-for="m in 12" :year="new Date().getFullYear()" :month="m - 1" />
+      </div>
     </div>
   </div>
 </template>

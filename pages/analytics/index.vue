@@ -25,9 +25,9 @@
             class="bg-white col-span-2 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 max-w-72 w-full"
             style="cursor: auto;">
             <div class="mb-4 flex items-center text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">Class
-              popularity</div>
+              Attendance</div>
             <div class="container flex justify-center items-center">
-              <ChartBar :chartData="classAttendance" title="Class Popularity" />
+              <ChartBar :chartData="classAttendance" title="Class Attendance" />
             </div>
           </div>
           <div

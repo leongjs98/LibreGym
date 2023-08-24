@@ -5,7 +5,41 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
-    if (query["attendeeId"] && query["sessionId"] && query["sessionDate"]) {
+    if (query["year"] && query["month"] && query["attendeeId"]) {
+      const attendeeId = query["attendeeId"].toString()
+      const year = parseInt(query["year"])
+      const month = parseInt(query["month"])
+
+      const startDateOfMonth = new Date(Date.UTC(year, month, 1, 0, 0, 0, 0)); // Start of the month in UTC
+      const endDateOfMonth = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999)); // End of the month in UTC
+
+      const monthlyAttendance = await prisma.attendance.findMany({
+        where: {
+          AND: {
+            sessionDate: {
+              lte: endDateOfMonth,
+              gte: startDateOfMonth
+            },
+            attendeeId
+          }
+        },
+        orderBy: {
+          sessionDate: 'asc'
+        }
+      })
+
+      const monthlyAttendanceArr: boolean[] = []
+      const lastDayOfMonth = endDateOfMonth.getUTCDate()
+      for (let i = 0; i < lastDayOfMonth; i++)
+        monthlyAttendanceArr.push(false)
+
+      for (let i = 0; i < monthlyAttendance.length; i++) {
+        const tmpDate = monthlyAttendance[i].sessionDate.getUTCDate()
+        monthlyAttendanceArr[tmpDate - 1] = true
+      }
+
+      return monthlyAttendanceArr
+    } else if (query["attendeeId"] && query["sessionId"] && query["sessionDate"]) {
       const attendeeId = query["attendeeId"].toString()
       const sessionId = query["sessionId"].toString()
       const sessionDate = new Date(query["sessionDate"].toString())
