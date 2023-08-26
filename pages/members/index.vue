@@ -87,7 +87,7 @@
                 </label>
               </td>
               <input type="checkbox" class="hidden peer" :id="'option-' + i" />
-              <div class="hidden peer-checked:block absolute p-2 ml-2 rounded border border-gray-500 bg-gray-100">
+              <div class="hidden peer-checked:block absolute p-2 rounded border border-gray-500 bg-gray-100">
                 <NuxtLink :to="`/members/${member.id}/attendance`" class="flex items-center gap-1">
                   <IconRoundMoreHoriz size="18px" />
                   Attendance
@@ -96,7 +96,7 @@
                   <IconEdit size="18px" />
                   Edit
                 </NuxtLink>
-                <NuxtLink :to="`/members/${member.id}/payment`" class="flex items-center gap-1">
+                <NuxtLink :to="`/members/${member.id}/payment/${new Date().getFullYear()}`" class="flex items-center gap-1">
                   Payment
                 </NuxtLink>
                 <label :for="'delete-' + i" class="flex items-center gap-1 cursor-pointer">

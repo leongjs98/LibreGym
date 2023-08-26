@@ -30,8 +30,8 @@
           :options="[{ name: 'Trial', value: 'trial' }, { name: 'Enquiry', value: 'enquiry' }, { name: 'Member', value: 'member' }]" />
         <inputDate label="Joined Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="joinedDate"
           :default-date="joinedDate" />
-        <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)"
-          name="contractEndDate" :default-date="contractEndDate" />
+        <!-- <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)" -->
+        <!--   name="contractEndDate" :default-date="contractEndDate" /> -->
         <InputTextarea v-model="homeAddress" name="homeAddress" label="Home Address*" />
         <InputTextarea v-model="medicalIssues" name="medicalIssues" label="Medical Issues" />
         <InputTextarea v-model="notes" name="notes" label="Notes" />
@@ -60,7 +60,7 @@ const medicalIssues = ref('')
 const currentDateStr = new Date().toISOString()
 const birthday = ref(new Date(currentDateStr))
 const joinedDate = ref(new Date(currentDateStr))
-const contractEndDate = ref(new Date(currentDateStr))
+const contractEndDate: Ref<Date> | Ref<null> = ref(null)
 
 const showToast = ref(false)
 const toastType = ref('info')

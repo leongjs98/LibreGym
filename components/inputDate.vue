@@ -1,6 +1,6 @@
 <template>
   <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-    <p class="text-gray-600">
+    <p v-if="label" class="text-gray-600">
       {{ label }} (YYYY/MM/DD){{ isRequired ? '*' : '' }}
     </p>
     <div class="flex items-center gap-4">

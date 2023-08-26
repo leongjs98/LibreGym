@@ -29,12 +29,12 @@
         <inputDate label="Joined Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="joinedDate"
           :default-date="joinedDate" />
 
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600">Payment History</p>
-          <PaymentHistory />
-        </div>
-        <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)"
-          name="contractEndDate" :default-date="contractEndDate" />
+        <!-- <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b"> -->
+        <!--   <p class="text-gray-600">Payment History</p> -->
+        <!--   <PaymentHistory /> -->
+        <!-- </div> -->
+        <!-- <inputDate label="Contract End Date" :is-required="false" @date-changed="(e) => updateDate(e)" -->
+        <!--   name="contractEndDate" :default-date="contractEndDate" /> -->
 
         <InputTextarea v-model="homeAddress" name="homeAddress" label="Home Address*" />
         <InputTextarea v-model="medicalIssues" name="medicalIssues" label="Medical Issues" />
