@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       const sessionDate = new Date(sessDateStr)
       const sessionId = query['sessionId'].toString()
 
-      const attedanceIDs = await prisma.attendance.findMany({
+      const attendeeIds = await prisma.attendance.findMany({
         where: {
           sessionDate,
           sessionId,
@@ -39,40 +39,28 @@ export default defineEventHandler(async (event) => {
         }
       })
 
-      let memberIDsArr: string[] = []
+      const allMembers = await prisma.member.findMany()
 
-      for (let i = 0; i < attedanceIDs.length; i++) {
-        memberIDsArr.push(attedanceIDs[i].attendeeId)
+      for (let i = 0; i < allMembers.length; i++) {
+        const member = allMembers[i]
+
+        for (let j = 0; j < attendeeIds.length; j++) {
+          const attendeeId = attendeeIds[j].attendeeId
+
+          if (member.id == attendeeId) {
+            allMembers[i].attended = true
+            break
+          } else {
+            allMembers[i].attended = false
+          }
+        }
       }
 
-      const memberIDs = memberIDsArr.map((item) => {
-        return { id: item };
-      })
-
-      if (query["exclude"] == "true") {
-        const nonAttendees = await prisma.member.findMany({
-          where: {
-            NOT: {
-              OR: memberIDs
-            }
-          },
-        })
-
-        return nonAttendees 
-
-      } else {
-        const attendees = await prisma.member.findMany({
-          where: {
-            OR: memberIDs
-          },
-        })
-
-        return attendees
-      }
+      return allMembers
 
     } else {
       const allMembers = await prisma.member.findMany()
-      return allMembers 
+      return allMembers
     }
   } catch (e) {
     throw e
