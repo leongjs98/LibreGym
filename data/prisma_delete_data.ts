@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-
 const prisma = new PrismaClient()
 
 async function main() {
   console.log("Deleting data")
+  await prisma.payment.deleteMany()
   await prisma.attendance.deleteMany()
   await prisma.session.deleteMany()
   await prisma.member.deleteMany()
