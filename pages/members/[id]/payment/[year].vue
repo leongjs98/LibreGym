@@ -5,7 +5,7 @@
       <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
     </transition>
     <MemberLinks />
-    <div class="w-full p-4 sm:p-0 space-y-4">
+    <div class="w-full p-0 space-y-4">
       <!-- <h2 class="text-xl">Payment History</h2> -->
       <div class="flex justify-between items-center">
         <NuxtLink :to="year - 1 >= new Date(member.joinedDate).getFullYear() ? `/members/${id}/payment/${year - 1}` : ''"
@@ -21,7 +21,7 @@
           {{ formatDate(member.joinedDate) }}
         </span>
       </p>
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap justify-center gap-4">
         <AttendanceCalendar @toast="(e) => runTriggerToast(e)" v-for="m in 12"
           :member-joined-date="new Date(member.joinedDate)" :year="year" :month="m - 1" />
       </div>

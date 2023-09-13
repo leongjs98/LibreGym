@@ -15,12 +15,12 @@
         </NuxtLink>
       </div>
       <template v-else>
-        <div class="w-full flex justify-between">
+        <div class="w-full flex gap-4 flex-wrap justify-between pt-8">
           <button class="py-1.5 px-3 border-gray-500 border-2" @click="getPrevWeek()">Previous week</button>
           <button class="py-1.5 px-3 border-gray-500 border-2" @click="getNextWeek()">Next week</button>
         </div>
-        <div v-for="(date, i) in datesOfWeek" :key="i" class="md:flex justify-start">
-          <div class="w-44 min-w-max flex items-center pl-3 pb-3 md:p-0 rounded text-lg font-semibold">
+        <div v-for="(date, i) in datesOfWeek" :key="i" class="md:flex gap-4 justify-start">
+          <div class="min-w-[176px] w-44 flex items-center pl-3 pb-3 md:p-0 rounded text-lg font-semibold">
             {{ getDayOfWeek(date) }}, {{ getFormattedDate(date) }}
           </div>
           <div class="flex gap-4 flex-wrap">
@@ -149,9 +149,9 @@ if (getError.value) {
 async function sortClasses() {
   sessionsSortedByDOW.value = [[], [], [], [], [], [], []]
   if (sessions.value) {
-    for (var i = 0; i < sessions.value.length; i++) {
-      const currentClass = sessions.value[i]
+    for (let i = 0; i < sessions.value.length; i++) {
       sessions.value[i].optionsVisible = false
+      const currentClass = sessions.value[i]
       sessionsSortedByDOW.value[currentClass.dayOfWeek].push(currentClass)
     }
   }
@@ -194,15 +194,14 @@ sortClasses()
 
 function getPrevWeek() {
   for (let i = 0; i < 7; i++) {
-    const tempDate = new Date()
-    datesOfWeek.value[i] = new Date(tempDate.setDate(datesOfWeek.value[i].getDate() - 7))
+    // if just setDate(...), vue won't detect the changes
+    datesOfWeek.value[i] = new Date(datesOfWeek.value[i].setDate(datesOfWeek.value[i].getDate() - 7))
   }
 }
 
 function getNextWeek() {
   for (let i = 0; i < 7; i++) {
-    const tempDate = new Date()
-    datesOfWeek.value[i] = new Date(tempDate.setDate(datesOfWeek.value[i].getDate() + 7))
+    datesOfWeek.value[i] = new Date(datesOfWeek.value[i].setDate(datesOfWeek.value[i].getDate() + 7))
   }
 }
 

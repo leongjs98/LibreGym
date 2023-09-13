@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full space-x-4 flex justify-end">
+  <div class="w-full gap-4 flex flex-wrap justify-end">
     <LinkBtn to="/classes/edit">
       Edit classes
     </LinkBtn>

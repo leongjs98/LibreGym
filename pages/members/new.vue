@@ -17,7 +17,7 @@
       <form @submit.prevent="submitForm">
 
         <inputText v-model="fullName" name="fullname" label="Full name*" />
-        <inputRadio v-model="sex" name="fullname" label="Sex*" :options="['female', 'male']"/>
+        <inputRadio v-model="sex" name="fullname" label="Sex*" :options="['female', 'male']" />
         <inputText v-model="email" name="email" label="Email address" />
         <inputText v-model="phoneNumber" name="phoneNumber" type="tel" label="Phone Number*" />
         <inputDate label="Birth Date" :is-required="true" @date-changed="(e) => updateDate(e)" name="birthday"
@@ -36,9 +36,13 @@
         <InputTextarea v-model="medicalIssues" name="medicalIssues" label="Medical Issues" />
         <InputTextarea v-model="notes" name="notes" label="Notes" />
 
-        <div class="flex justify-end p-4">
-          <button type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
+        <div class="flex gap-3 justify-end p-4">
+          <button
+            class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+            type="reset">Reset</button>
+          <button
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            type="submit">Create</button>
         </div>
       </form>
     </div>

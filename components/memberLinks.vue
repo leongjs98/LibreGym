@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-end space-x-3">
+  <div class="w-full flex flex-wrap gap-3 justify-end">
     <LinkBtn link="/members/">
       View members
     </LinkBtn>

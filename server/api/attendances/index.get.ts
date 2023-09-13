@@ -75,6 +75,7 @@ export default defineEventHandler(async (event) => {
 
       const avgMembersPerSession: number = totalAttendees / sessions.length
       return avgMembersPerSession
+
     } else if (query['memberDemographic']) {
 
       if (query['memberDemographic'] == 'sex') {
@@ -89,25 +90,38 @@ export default defineEventHandler(async (event) => {
 
     }
     else {
-      const classAttendance = await prisma.class.findMany({
+      const classes = await prisma.class.findMany({
         orderBy: { name: "asc" },
         select: { name: true, id: true }
       })
 
-      for (let i = 0; i < classAttendance.length; i++) {
+      interface ClassAttendance {
+        id: string
+        name: string
+        number: number
+      }
+
+      const classAttendance: ClassAttendance[] = []
+
+      for (let i = 0; i < classes.length; i++) {
+
         const sessions = await prisma.session.findMany({
-          where: { classId: classAttendance[i].id },
+          where: { classId: classes[i].id },
           select: { id: true }
         })
 
-        classAttendance[i]['number'] = 0
+        classAttendance.push({
+          'id': classes[i].id,
+          'name': classes[i].name,
+          'number': 0
+        })
 
         for (let j = 0; j < sessions.length; j++) {
-          const attendances = await prisma.attendance.count({
+          const attendanceNumber = await prisma.attendance.count({
             where: { sessionId: sessions[j]['id'] }
           })
 
-          classAttendance[i]['number'] += attendances
+          classAttendance[i]['number'] += attendanceNumber
         }
       }
 

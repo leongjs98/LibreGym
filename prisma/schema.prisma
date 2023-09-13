@@ -63,6 +63,16 @@ model Member {
   @@unique([fullName, birthday])
 }
 
+model Notification {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  read        Boolean @default(false)
+  trash       Boolean @default(false)
+
+  @@unique([title, description])
+}
+
 model Payment {
   id    String       @id @default(uuid())
   year  Int
@@ -88,14 +98,16 @@ model Class {
 }
 
 model Session {
-  id          String   @id @default(uuid())
-  oneTime     Boolean  @default(false)
-  dayOfWeek   Int
-  startTime   DateTime @db.Time()
-  endTime     DateTime @db.Time()
-  description String?
+  id           String   @id @default(uuid())
+  oneTime      Boolean  @default(false)
+  dayOfWeek    Int
+  startTime    DateTime @db.Time()
+  endTime      DateTime @db.Time()
+  description  String?
+  cancelled    Boolean  @default(false)
+  cancelReason String?
 
-  // Only for one time event or period
+  // Only for one time or periodic event
   startDate DateTime? @db.Date()
   endDate   DateTime? @db.Date()
 

@@ -1,34 +1,27 @@
 <template>
   <div
-    class="max-w-md sm:max-w-5xl md:max-w-6xl py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
+    class="max-w-lg sm:max-w-5xl md:max-w-6xl py-16 px-5 mx-auto justify-center items-center h-full flex flex-col gap-10">
     <transition name="toast">
       <toast @click="showToast = false" v-if:="showToast" :type="toastType" :title="toastTitle" :message="toastMsg" />
     </transition>
     <div class="w-full">
-      <div class="w-full flex flex-col-reverse md:flex-row gap-3 justify-between items-end">
-        <div v-if="!noMember" class="w-full flex space-x-3 items-center">
-          <p class="text-xl border-b">
+      <div class="w-full flex flex-col-reverse md:flex-row gap-6 justify-between items-end">
+        <div v-if="!noMember" class="w-full flex md:flex-row flex-wrap gap-3 items-center">
+          <p class="w-full min-w-fit text-xl border-b">
             Member:
             <b>{{ members?.length }}</b>
           </p>
-          <div class="flex items-center">
+          <div class="w-full min-w-fit flex items-center">
+            <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum aperiam accusantium officiis impedit atque, assumenda asperiores. Aspernatur sunt reiciendis facere. Natus ex ea exercitationem mollitia ipsum accusamus at qui dignissimos. -->
             <label for="search" class="sr-only">Search</label>
-            <div class="relative w-full">
-              <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </div>
+            <div class="w-full">
               <input v-model="searchQuery" type="text" id="search"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Search">
             </div>
           </div>
         </div>
-        <memberLinks/>
+        <memberLinks />
       </div>
 
       <div v-if="noMember" class="w-full space-y-8">
@@ -51,10 +44,13 @@
               class="hover:bg-gray-100 overflow-x-auto">
               <td class="px-3 py-2 font-normal">
                 <div class="text-left">{{ member.fullName }}</div>
-                <div class="text-left">
-                  {{ member.belt }}
-                  <span v-if="member.sex == 'female'" class="">(F)</span>
-                  <span v-if="member.sex == 'male'" class="">(M)</span>
+                <div class="text-left flex gap-1 items-center">
+                  <span class="rounded px-1.5 py-0.5 w-14 text-center"
+                    :class="{ 'text-black bg-white border border-black': member.belt == 'white', 'bg-blue-100 text-blue-900': member.belt == 'blue', 'bg-purple-200 text-purple-900': member.belt == 'purple', 'bg-amber-100 text-amber-900': member.belt == 'brown', 'text-white bg-black': member.belt == 'black' }">
+                    {{ member.belt }}
+                  </span>
+                  <span v-if="member.sex == 'female'">(F)</span>
+                  <span v-if="member.sex == 'male'">(M)</span>
                 </div>
               </td>
               <td class="py-2 font-normal">
@@ -62,41 +58,39 @@
                 <div class="text-left">{{ member.phoneNumber }}</div>
               </td>
               <td class="py-2 font-normal">
-                <div v-if="member.status == 'member'" class="mx-auto px-3 py-1.5 w-fit">
-                  {{ member.status }}
-                </div>
-                <div v-else-if="member.status == 'trial'" class="mx-auto px-3 py-1.5 w-fit">
-                  {{ member.status }}
-                </div>
-                <div v-else-if="member.status == 'enquiry'"
-                  class="rounded mx-auto px-3 py-1.5 w-fit text-yellow-900 bg-yellow-200">
+                <div class="rounded mx-auto px-3 py-1.5 w-fit"
+                  :class="{ 'text-yellow-950 bg-yellow-100': member.status == 'enquiry' }">
                   {{ member.status }}
                 </div>
               </td>
-              <td class="py-2 font-normal">
+              <td class="h-max py-2 font-normal hidden md:table-cell">
                 <div v-if="member.signedWaiver" class="mx-auto px-3 py-1.5 w-fit">
-                  Signed
+                  Signed waiver
                 </div>
                 <div v-else class="rounded mx-auto px-3 py-1.5 text-red-900 bg-red-100 w-fit">
                   Not Signed
                 </div>
               </td>
               <td class="">
-                <label :for="'option-' + i" class="hover:cursor-pointer">
+                <label tabindex="0" :for="'option-' + i" class="hover:cursor-pointer">
                   <IconMore2Line />
                 </label>
               </td>
               <input type="checkbox" class="hidden peer" :id="'option-' + i" />
               <div class="hidden peer-checked:block absolute p-2 rounded border border-gray-500 bg-gray-100">
-                <NuxtLink :to="`/members/${member.id}/attendance`" class="flex items-center gap-1">
-                  <IconRoundMoreHoriz size="18px" />
-                  Attendance
-                </NuxtLink>
                 <NuxtLink :to="`/members/${member.id}/edit`" class="flex items-center gap-1">
                   <IconEdit size="18px" />
                   Edit
                 </NuxtLink>
-                <NuxtLink :to="`/members/${member.id}/payment/${new Date().getFullYear()}`" class="flex items-center gap-1">
+                <NuxtLink :to="`/members/${member.id}/attendance#analytics`" class="flex items-center gap-1">
+                  <Icon name="ic:sharp-class" size="18px" />
+                  Attendance
+                </NuxtLink>
+                <!-- <NuxtLink :to="`/members/${member.id}/payment/${new Date().getFullYear()}`" class="flex items-center gap-1"> -->
+                <!--   Payment -->
+                <!-- </NuxtLink> -->
+                <NuxtLink :to="`/members/${member.id}/attendance#`" class="flex items-center gap-1">
+                  <Icon name="ic:round-attach-money" size="20px" />
                   Payment
                 </NuxtLink>
                 <label :for="'delete-' + i" class="flex items-center gap-1 cursor-pointer">

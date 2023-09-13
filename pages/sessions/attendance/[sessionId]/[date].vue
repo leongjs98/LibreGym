@@ -79,10 +79,10 @@
               <!--   </button> -->
               <!-- </div> -->
             </div>
-            <ul class="max-h-96 overflow-auto">
+            <ul class="grid grid-cols-1 gap-3 max-h-96 overflow-auto">
               <li v-for="(member, i) in filteredMembers"
                 class="odd:bg-gray-50 flex gap-3 items-center font-semibold text-gray-800 p-3 hover:bg-gray-100 rounded-md"
-                :class="member.attended ? 'border-b-green-500 border-2' : ''">
+                :class="member.attended ? 'border-green-500 border-2' : ''">
                 <div class="w-full flex justify-between items-center">
                   <div>
                     <div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-4 sm:p-0 w-96 space-y-4">
+  <div class="w-full p-0 space-y-4">
     <!-- <h2 class="text-xl">Payment History</h2> -->
     <div class="flex justify-between items-center">
       <button type="button" @click="year--" class="border px-2 py-1.5 border-black">Prev</button>

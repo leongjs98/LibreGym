@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!pending" class="max-w-sm w-full shadow-lg md:p-8 p-5 dark:bg-gray-800 bg-white rounded-t">
+  <div v-if="!pending" class="max-w-sm w-full shadow-lg p-2 sm:p-5 md:p-8 dark:bg-gray-800 bg-white rounded-t">
     <div class="flex justify-between">
       <div class="w-fit">
         <span class="focus:outline-none text-base font-bold dark:text-gray-100 text-gray-800">
@@ -89,7 +89,7 @@
         <tbody>
           <tr v-for="i in dateArr.length">
             <td v-for="j in dateArr[i - 1].length" :class="(i - 1 == 0) ? 'pt-6' : ''">
-              <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+              <div class="p-1 sm:p-2 cursor-pointer flex w-full justify-center">
                 <p class="text-base text-gray-500 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center font-medium rounded-md"
                   :class="dateArr[i - 1][j - 1].attendance ? 'focus:ring-green-700 focus:bg-green-500 hover:bg-green-500 w-6 h-6 text-white bg-green-600' : ''">
                 <div

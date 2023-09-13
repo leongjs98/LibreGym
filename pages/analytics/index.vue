@@ -9,8 +9,7 @@
             <p class="text-2xl font-bold text-right">{{ getMemberDemographic.male + getMemberDemographic.female }}</p>
           </div>
           <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-72 w-full">
-            <div class="flex items-center text-lg text-gray-900" style="cursor: auto;">Average
-              members per session</div>
+            <div class="flex items-center text-lg text-gray-900" style="cursor: auto;">Average members per session</div>
             <div class="space-y-4">
               <div v-for="c in avgMembersPerSession" class="grid grid-cols-2 mt-2 text-xl spacing-sm text-black">
                 <p style="cursor: auto;">
@@ -26,6 +25,12 @@
             style="cursor: auto;">
             <div class="mb-4 flex items-center text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">Class
               Attendance</div>
+            <div v-for="c in classAttendance" class="grid grid-cols-2 mt-2 text-xl spacing-sm text-black">
+              <p style="cursor: auto;">
+                {{ c.name }}:
+              </p>
+              <p class="text-2xl font-bold text-right">{{ c.value }}</p>
+            </div>
             <div class="container flex justify-center items-center">
               <ChartBar :chartData="classAttendance" title="Class Attendance" />
             </div>
@@ -35,6 +40,12 @@
             style="cursor: auto;">
             <div class="mb-4 flex items-center text-lg text-gray-900 dark:text-gray-100" style="cursor: auto;">Member
               Demographic</div>
+            <div v-for="c in memberDemographic" class="grid grid-cols-2 mt-2 text-xl spacing-sm text-black">
+              <p style="cursor: auto;">
+                {{ c.name }}:
+              </p>
+              <p class="text-2xl font-bold text-right">{{ c.number }}</p>
+            </div>
             <div class="container flex justify-center items-center">
               <ChartPie :chartData="memberDemographic" />
             </div>
@@ -52,8 +63,6 @@ const { data: getMemberDemographic } = await useFetch('/api/attendances', {
   query: { memberDemographic: 'sex' }
 })
 
-console.log(getMemberDemographic.value.male + getMemberDemographic.value.female)
-
 const memberDemographic = [
   {
     'name': 'female',
@@ -67,8 +76,14 @@ const memberDemographic = [
   }
 ]
 
-const classAttendanceArr: Object[] = []
-const avgMembersPerSession: Object[] = []
+interface NameValue {
+  name: string
+  value: number
+}
+
+const classAttendanceArr: NameValue[] = []
+const avgMembersPerSession: NameValue[] = []
+
 for (let i = 0; i < getClassAttendance.value?.length; i++) {
   classAttendanceArr.push({
     "name": getClassAttendance.value[i].name,
